@@ -1,3 +1,56 @@
 <resources>
     <string name="app_name">AppTareas</string>
+
+    <string name="title_nueva_tarea">Nueva Tarea</string>
+    <string name="label_nombre_tarea">NOMBRE DE LA TAREA</string>
+    <string name="hint_ejemplo_tarea">Ej: Entregar TP de Android</string>
+
+    <string name="cd_volver">Volver atrás</string>
+    <string name="cd_opciones">Más opciones</string>
+
+    <string name="label_descripcion">DESCRIPCIÓN</string>
+    <string name="hint_descripcion">Detalles adicionales</string>
+
+    <string name="label_fecha_hora">FECHA Y HORA</string>
+    <string name="default_fecha">28 May 2026</string>
+    <string name="default_hora">10:00 AM</string>
+
+    <string name="label_prioridad">PRIORIDAD</string>
+    <string name="prioridad_alta">Alta</string>
+    <string name="prioridad_media">Media</string>
+    <string name="prioridad_baja">Baja</string>
+
+    <string name="label_categoria">CATEGORÍA</string>
+    <string name="cat_estudios">Estudios</string>
+    <string name="cat_trabajo">Trabajo</string>
+    <string name="cat_personal">Personal</string>
+    <string name="cat_compras">Compras</string>
+    <string name="cat_hobbies">Hobbies</string>
+    <string name="cat_otros">Otros</string>
+
+    <string name="label_adjuntos">ADJUNTOS (OPCIONAL)</string>
+    <string name="btn_añadir_foto">Añadir Foto</string>
+    <string name="btn_añadir_ubicacion">Añadir Ubicación</string>
+
+    <string name="btn_crear_tarea">✓ Crear tarea</string>
+
+    <string name="estado_pendiente">Pendiente</string>
+    <string name="titulo_tarea_ejemplo">Entregar\nProyecto</string>
+    <string name="desc_tarea_ejemplo">Presentar el backend</string>
+    <string name="fecha_ejemplo">28 May 2026</string>
+    <string name="label_vencimiento">Vencimiento</string>
+    <string name="hora_ejemplo">12:00 PM</string>
+    <string name="label_hora_limite">Hora límite</string>
+    <string name="subtareas_ejemplo">2 / 4</string>
+    <string name="label_subtareas">Subtareas</string>
+    <string name="recordatorio_ejemplo">30 min antes</string>
+    <string name="label_recordatorio">Recordatorio</string>
+    <string name="label_foto_adjunta">FOTO ADJUNTA</string>
+    <string name="foto_ejemplo">foto.jpg</string>
+    <string name="label_ubicacion">UBICACIÓN</string>
+    <string name="btn_marcar_completada">✓ Marcar completada</string>
+
+    <string name="desc_boton_volver">Volver atrás</string>
+    <string name="desc_boton_opciones">Opciones de la tarea</string>
+
 </resources>
