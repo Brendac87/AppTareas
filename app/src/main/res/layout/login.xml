@@ -124,12 +124,13 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:minHeight="48dp"
                 android:text="¿Olvidaste tu contraseña?"
                 android:textColor="#E6EC4899"
                 android:textSize="12sp"
-                android:textStyle="bold"
-                android:clickable="true"
-                android:focusable="true" />
+                android:textStyle="bold" />
 
             <!--boton login-->
             <Button
