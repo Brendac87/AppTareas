@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <!--header-->
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,16 +26,20 @@
             >
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_weight="1">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/greeting"
                     android:text="Buenos dias"
-                    android:layout_weight="1"
+                    android:textColor="#80FFFFFF"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.04"
                     />
 
                 <TextView
@@ -43,6 +48,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
+                    android:textColor="#FFFFFF"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+
                     />
 
             </LinearLayout>
@@ -70,6 +79,7 @@
 
         </LinearLayout>
 
+        <!--card de progreso-->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -84,7 +94,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="#000000"
+                android:background="@drawable/bg_progress_card"
                 android:padding="20dp">
 
                 <!-- titulo / porcentaje -->
@@ -138,9 +148,10 @@
                     style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="8dp"
-                    android:progress="20"
+                    android:progress="40"
                     android:max="100"
-                    android:background="#000000" />
+                    android:progressDrawable="@drawable/progress_bar_gradient"
+                    android:background="@drawable/progress_bar_bg"/>
 
                 <!--estadisticas c/p-->
                 <LinearLayout
@@ -154,7 +165,7 @@
                     <View
                         android:layout_width="8dp"
                         android:layout_height="8dp"
-                        android:background="#000000" />
+                        android:background="#33691E" />
 
                     <TextView
                         android:id="@+id/tvDoneCount"
@@ -162,7 +173,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="6dp"
                         android:text="1 completadas"
-                        android:textColor="#B3FFFFFF"
+                        android:textColor="#DCFFFFFF"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
@@ -171,6 +182,7 @@
                         android:layout_width="8dp"
                         android:layout_height="8dp"
                         android:layout_marginStart="16dp"
+                        android:background="#F57F17"
                         />
 
                     <TextView
@@ -179,7 +191,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="6dp"
                         android:text="4 pendientes"
-                        android:textColor="#B3FFFFFF"
+                        android:textColor="#DCFFFFFF"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
@@ -241,4 +253,4 @@
     </LinearLayout>
 
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>
