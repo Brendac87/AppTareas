@@ -2,6 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/nav_home"    android:title="Inicio"  android:icon="@drawable/ic_empty" />
     <item android:id="@+id/nav_tasks"   android:title="Tareas"  android:icon="@drawable/ic_empty"/>
-    <item android:id="@+id/nav_map"     android:title="Mapa"     android:icon="@drawable/ic_empty"/>
+    <item android:id="@+id/nav_map"     android:title="Notificaciones"     android:icon="@drawable/ic_empty"/>
     <item android:id="@+id/nav_profile" android:title="Perfil"   android:icon="@drawable/ic_empty"/>
 </menu>

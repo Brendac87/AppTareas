@@ -33,6 +33,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Mis Tareas"
+                    android:textColor="#FFFFFF"
 
                     android:textSize="22sp"
                     android:textStyle="bold" />
@@ -125,6 +126,127 @@
 
             </LinearLayout>
 
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:layout_marginBottom="14dp"
+                android:clipToPadding="false">
+
+                <LinearLayout
+                    android:id="@+id/filterGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <!--filtros-->
+                    <TextView
+                        android:id="@+id/filterAll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:layout_marginEnd="8dp"
+                        android:gravity="center"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:text="Todas"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:background="@drawable/bg_f_active"
+                        android:clickable="true"
+                        android:focusable="true"/>
+
+                    <!-- filtro para pendientes -->
+                    <TextView
+                        android:id="@+id/chipPending"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:layout_marginEnd="8dp"
+                        android:gravity="center"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:text="Pendientes"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#80FFFFFF"
+                        android:background="@drawable/bg_f_inactive"
+                        android:clickable="true"
+                        android:focusable="true"/>
+
+                    <!--compl -->
+                    <TextView
+                        android:id="@+id/chipDone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:layout_marginEnd="8dp"
+                        android:gravity="center"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:text="Completadas"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#80FFFFFF"
+                        android:background="@drawable/bg_f_inactive"
+                        android:clickable="true"
+                        android:focusable="true"/>
+
+                    <!--prioridad alta-->
+                    <TextView
+                        android:id="@+id/chipHigh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:layout_marginEnd="8dp"
+                        android:gravity="center"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:text="Alta"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#80FFFFFF"
+                        android:background="@drawable/bg_f_inactive"
+                        android:clickable="true"
+                        android:focusable="true"/>
+
+                    <!--m-->
+                    <TextView
+                        android:id="@+id/chipMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:layout_marginEnd="8dp"
+                        android:gravity="center"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:text="Media"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#80FFFFFF"
+                        android:background="@drawable/bg_f_inactive"
+                        android:clickable="true"
+                        android:focusable="true"/>
+
+                    <!--b-->
+                    <TextView
+                        android:id="@+id/chipLow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:gravity="center"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:text="Baja"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#80FFFFFF"
+                        android:background="@drawable/bg_f_inactive"
+                        android:clickable="true"
+                        android:focusable="true"/>
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+
             <TextView
                 android:id="@+id/labelPending"
                 android:layout_width="wrap_content"
@@ -146,6 +268,39 @@
                 android:clipToPadding="false"
                 android:nestedScrollingEnabled="false"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+
+            <LinearLayout
+                android:id="@+id/emptyState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:paddingTop="48dp"
+                android:paddingBottom="48dp"
+                android:visibility="gone">
+
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="No hay tareas acá"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Tocá el + para crear una nueva"
+                    android:textColor="#59FFFFFF"
+                    android:textSize="13sp"/>
+
+            </LinearLayout>
+
 
 
 
@@ -178,6 +333,22 @@
 
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="90dp"
+        android:layout_marginEnd="20dp"
+
+        android:text="+"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+
+        app:backgroundTint="#B388FF"
+        app:elevation="6dp"/>
+
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
