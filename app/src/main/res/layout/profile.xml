@@ -428,11 +428,11 @@
         app:labelVisibilityMode="labeled"
         app:elevation="0dp"
         app:menu="@menu/bottom_nav_menu"
-        app:itemIconSize="0dp"
+        app:itemIconSize="26dp"
         app:itemTextColor="@color/bottom_nav"
+
         app:itemIconTint="@color/bottom_nav"
-        app:itemPaddingTop="28dp"
-        app:itemPaddingBottom="28dp"
+        app:itemActiveIndicatorStyle="@android:style/Widget.DeviceDefault"
 
         >
 
