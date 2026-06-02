@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         //Inicializar Firebase
-        auth = Firebase.auth
+        auth = FirebaseAuth.getInstance()
 
         //Comprobar si el usuario ya inició sesión previamente (Sesión Persistente)
         if (auth.currentUser == null) {

@@ -8,8 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
-
 class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
 
@@ -17,10 +15,10 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login)
 
-        auth = Firebase.auth
+        auth = FirebaseAuth.getInstance()
 
-        val emailEditText = findViewById<TextInputEditText>(R.id.tilEmail)
-        val passwordEditText = findViewById<TextInputEditText>(R.id.tilEmail)
+        val emailEditText = findViewById<TextInputEditText>(R.id.etEmail)
+        val passwordEditText = findViewById<TextInputEditText>(R.id.etpassword)
         val btnLogin = findViewById<Button>(R.id.btnLogin)
 
         btnLogin.setOnClickListener {
