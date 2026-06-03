@@ -136,11 +136,13 @@
                         android:orientation="vertical"
                         android:padding="12dp">
                         <TextView
+                            android:id="@+id/tv_fecha"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/fecha_ejemplo"
+                            android:text="02 de Junio, 2026"
                             android:textColor="#FFFFFF"
                             android:textStyle="bold"/>
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -159,9 +161,10 @@
                         android:orientation="vertical"
                         android:padding="12dp">
                         <TextView
+                            android:id="@+id/tv_hora"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/hora_ejemplo"
+                            android:text="07:30 PM"
                             android:textColor="#FFFFFF"
                             android:textStyle="bold"/>
                         <TextView

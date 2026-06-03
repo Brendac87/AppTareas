@@ -52,6 +52,7 @@
                 app:cardElevation="0dp">
 
                 <TextView
+                    android:id="@+id/tvInitials"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -103,7 +104,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Matías L."
+                android:text=""
                 android:textColor="#FFFFFF"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -112,7 +113,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="matias@email.com"
+                android:text=""
                 android:textColor="#66FFFFFF"
                 android:textSize="12sp" />
 
