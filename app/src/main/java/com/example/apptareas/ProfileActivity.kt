@@ -42,6 +42,7 @@ class ProfileActivity : AppCompatActivity() {
                         userEmailTextView.text = email
 
                         val iniciales = nombre.take(2).uppercase()
+                        findViewById<TextView>(R.id.tvInitials).text = iniciales
 
                     } else {
                         Toast.makeText(this, "No se encontró el perfil del usuario", Toast.LENGTH_SHORT).show()
