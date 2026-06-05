@@ -91,6 +91,12 @@ class ProfileActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
+        findViewById<com.google.android.material.button.MaterialButton>(R.id.btnEditProfile)
+            .setOnClickListener {
+                startActivity(Intent(this, EditProfileActivity::class.java))
+            }
+
     }
 }
 
