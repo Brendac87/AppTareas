@@ -56,10 +56,16 @@ class ProfileActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Sesión no iniciada", Toast.LENGTH_SHORT).show()
         }
-
+        
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottomNav.selectedItemId = R.id.nav_profile
         NavigationUtils.configurarNavegacion(this, bottomNav)
+        
+        findViewById<com.google.android.material.button.MaterialButton>(R.id.btnEditProfile)
+            .setOnClickListener {
+                startActivity(Intent(this, EditProfileActivity::class.java))
+            }
+
     }
 }
 
