@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -54,42 +55,10 @@ class ProfileActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Sesión no iniciada", Toast.LENGTH_SHORT).show()
         }
-        val bottomNav = findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(R.id.bottomNav)
 
-        bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-
-                // Si tocan "Tareas"
-                R.id.nav_tasks -> {
-                    val intent = Intent(this, TaskListActivity::class.java)
-                    startActivity(intent)
-                    overridePendingTransition(0, 0)
-                    finish() // Recomendado para no acumular pantallas en el fondo
-                    true
-                }
-
-                // Si tocan "Perfil" (Ya estamos en esta pantalla, así que no hacemos nada)
-                R.id.nav_profile -> {
-                    true
-                }
-
-                // --- ¡NUEVO! Si tocan "Inicio" (Home) ---
-                R.id.nav_home -> {
-                    val intent = Intent(this, HomeActivity::class.java)
-                    startActivity(intent)
-                    overridePendingTransition(0, 0)
-                    finish() // Cerramos esta pantalla para liberar memoria
-                    true
-                }
-
-                // Dejamos preparado Notificaciones para el futuro
-                R.id.nav_not -> {
-                    true
-                }
-
-                else -> false
-            }
-        }
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
+        bottomNav.selectedItemId = R.id.nav_profile
+        NavigationUtils.configurarNavegacion(this, bottomNav)
     }
 }
 
