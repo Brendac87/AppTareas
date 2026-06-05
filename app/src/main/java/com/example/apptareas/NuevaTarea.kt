@@ -17,7 +17,7 @@ class NuevaTarea : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
 
-    // Variables para guardar lo que el usuario elija (empiezan con los valores por defecto del XML)
+    // Variables para guardar lo que el usuario elija
     private var prioridadSeleccionada = "Alta"
     private var categoriaSeleccionada = "Estudios"
 

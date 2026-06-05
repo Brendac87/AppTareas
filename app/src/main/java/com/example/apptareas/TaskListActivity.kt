@@ -35,32 +35,17 @@ class TaskListActivity : AppCompatActivity() {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
         val fab = findViewById<View>(R.id.fab) // <- Conectamos el botón flotante
 
-        // 2.5 Darle funcionalidad al botón + para ir a NuevaTarea
+        // Funcionalidad al botón + para ir a NuevaTarea
         fab.setOnClickListener {
             val intent = Intent(this, NuevaTarea::class.java)
             startActivity(intent)
         }
 
         // 3. Configurar la barra de navegación inferior
-        // Marcar "Tareas" como seleccionado por defecto en esta pantalla
         bottomNav.selectedItemId = R.id.nav_tasks
+        NavigationUtils.configurarNavegacion(this, bottomNav)
 
-        bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_tasks -> true // Ya estamos aquí
-                R.id.nav_profile -> {
-                    val intent = Intent(this, ProfileActivity::class.java)
-                    startActivity(intent)
-                    overridePendingTransition(0, 0)
-                    finish() // Cerramos esta para no acumular pantallas
-                    true
-                }
-                // Aquí irán nav_home y nav_not en el futuro
-                else -> false
-            }
-        }
-
-        // 4. Configurar el RecyclerView (la lista)
+        // 4. Configurar la lista
         rvTasks.layoutManager = LinearLayoutManager(this)
 
         // 5. Buscar las tareas en Firestore
@@ -89,11 +74,7 @@ class TaskListActivity : AppCompatActivity() {
                         rvTasks.visibility = View.VISIBLE
                         emptyState.visibility = View.GONE
 
-                        // --- ¡CAMBIO AQUÍ! ---
-                        // Al crear el adaptador, le pasamos la lista Y definimos qué hacer al hacer clic
                         val adapter = SimpleTaskAdapter(titulosDeTareas) { tituloClickeado ->
-
-                            // Creamos el Intent, guardamos el título y abrimos la pantalla de detalle
                             val intent = Intent(this@TaskListActivity, DetalleTarea::class.java)
                             intent.putExtra("TITULO_DE_LA_TAREA", tituloClickeado)
                             startActivity(intent)
@@ -108,7 +89,6 @@ class TaskListActivity : AppCompatActivity() {
     }
 
     // --- CLASE ADAPTADOR PARA EL RECYCLERVIEW ---
-    // --- ¡CAMBIO AQUÍ! Agregamos 'onTaskClick' al constructor para capturar la acción ---
     class SimpleTaskAdapter(
         private val tasks: List<String>,
         private val onTaskClick: (String) -> Unit
@@ -119,7 +99,6 @@ class TaskListActivity : AppCompatActivity() {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
-            // Usamos un diseño de lista integrado en Android
             val view = LayoutInflater.from(parent.context).inflate(android.R.layout.simple_list_item_1, parent, false)
             return TaskViewHolder(view)
         }

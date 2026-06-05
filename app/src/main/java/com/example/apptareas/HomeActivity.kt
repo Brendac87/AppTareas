@@ -22,7 +22,7 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.home) // Asegúrate de que el XML se llame 'home.xml'
+        setContentView(R.layout.home)
 
         // 1. Inicializar Firebase
         auth = FirebaseAuth.getInstance()
@@ -44,27 +44,8 @@ class HomeActivity : AppCompatActivity() {
         val fab = findViewById<View>(R.id.fab)
 
         // --- CONFIGURACIÓN DE NAVEGACIÓN ---
-
         bottomNav.selectedItemId = R.id.nav_home
-
-        bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> true // Ya estamos aquí
-                R.id.nav_tasks -> {
-                    startActivity(Intent(this, TaskListActivity::class.java))
-                    overridePendingTransition(0, 0)
-                    finish()
-                    true
-                }
-                R.id.nav_profile -> {
-                    startActivity(Intent(this, ProfileActivity::class.java))
-                    overridePendingTransition(0, 0)
-                    finish()
-                    true
-                }
-                else -> false
-            }
-        }
+        NavigationUtils.configurarNavegacion(this, bottomNav)
 
         fab.setOnClickListener {
             startActivity(Intent(this, NuevaTarea::class.java))
@@ -84,7 +65,7 @@ class HomeActivity : AppCompatActivity() {
         if (currentUser != null) {
             val uid = currentUser.uid
 
-            // A. Buscar datos del usuario (Nombre)
+            //Buscar datos del usuario (Nombre)
             db.collection("Usuarios").document(uid).get()
                 .addOnSuccessListener { documento ->
                     if (documento.exists()) {
@@ -97,7 +78,7 @@ class HomeActivity : AppCompatActivity() {
                     }
                 }
 
-            // B. Buscar las tareas para la lista y el progreso
+            //Buscar las tareas para la lista y el progreso
             db.collection("Usuarios").document(uid).collection("Mis_Tareas")
                 .get()
                 .addOnSuccessListener { resultado ->
@@ -106,11 +87,9 @@ class HomeActivity : AppCompatActivity() {
                     var pendientes = 0
 
                     for (documento in resultado) {
-                        // Guardamos el título para la lista
                         val titulo = documento.getString("titulo") ?: "Tarea sin título"
                         titulosDeTareas.add(titulo)
 
-                        // Contamos para la estadística
                         val estado = documento.getString("estado") ?: "pendiente"
                         if (estado.equals("completado", ignoreCase = true) || estado.equals("completada", ignoreCase = true)) {
                             completadas++
@@ -119,7 +98,7 @@ class HomeActivity : AppCompatActivity() {
                         }
                     }
 
-                    // C. Calcular porcentajes y actualizar la tarjeta de progreso
+                    // Calcular porcentajes y actualizar la tarjeta de progreso
                     val totalTareas = completadas + pendientes
 
                     if (totalTareas > 0) {
@@ -134,7 +113,7 @@ class HomeActivity : AppCompatActivity() {
                     tvDoneCount.text = "$completadas completadas"
                     tvPendingCount.text = "$pendientes pendientes"
 
-                    // D. Cargar la lista de tareas en el RecyclerView
+                    //Cargar la lista de tareas en el RecyclerView
                     val adapter = SimpleTaskAdapter(titulosDeTareas) { tituloClickeado ->
                         val intent = Intent(this@HomeActivity, DetalleTarea::class.java)
                         intent.putExtra("TITULO_DE_LA_TAREA", tituloClickeado)
