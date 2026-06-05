@@ -3,6 +3,7 @@ package com.example.apptareas
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
@@ -46,6 +47,12 @@ class LoginActivity : AppCompatActivity() {
                         Toast.makeText(this, mensajeError, Toast.LENGTH_LONG).show()
                     }
                 }
+        }
+        //-- BOTON REGISTRARSE--
+        val tvSignUp = findViewById<TextView>(R.id.tvSignUp)
+        tvSignUp.setOnClickListener {
+            val intent = Intent(this, CreateProfileActivity::class.java)
+            startActivity(intent)
         }
     }
 }
