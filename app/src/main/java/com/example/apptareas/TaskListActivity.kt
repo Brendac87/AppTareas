@@ -2,9 +2,7 @@ package com.example.apptareas
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -33,7 +31,7 @@ class TaskListActivity : AppCompatActivity() {
         val labelPending = findViewById<TextView>(R.id.labelPending)
         val emptyState = findViewById<LinearLayout>(R.id.emptyState)
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
-        val fab = findViewById<View>(R.id.fab) // <- Conectamos el botón flotante
+        val fab = findViewById<View>(R.id.fab)
 
         // Funcionalidad al botón + para ir a NuevaTarea
         fab.setOnClickListener {
@@ -56,27 +54,33 @@ class TaskListActivity : AppCompatActivity() {
             db.collection("Usuarios").document(uid).collection("Mis_Tareas")
                 .get()
                 .addOnSuccessListener { result ->
-                    val titulosDeTareas = mutableListOf<String>()
+                    // Mapeamos los documentos al modelo 'Task' usando su ID único
+                    val listaTareas = mutableListOf<Task>()
 
                     for (document in result) {
+                        val id = document.id // ID único del documento
                         val titulo = document.getString("titulo") ?: "Tarea sin título"
-                        titulosDeTareas.add(titulo)
+                        val fecha = document.getString("fecha") ?: "Sin fecha"
+                        val estado = document.getString("estado") ?: "pendiente"
+
+                        listaTareas.add(Task(id, titulo, fecha, estado))
                     }
 
-                    // 6. Actualizar el contador de PENDIENTES
-                    labelPending.text = "PENDIENTES · ${titulosDeTareas.size}"
+                    // 6. Actualizar el contador con el tamaño de la lista de objetos
+                    labelPending.text = "PENDIENTES · ${listaTareas.size}"
 
                     // 7. Mostrar/Ocultar el estado vacío dependiendo de si hay tareas
-                    if (titulosDeTareas.isEmpty()) {
+                    if (listaTareas.isEmpty()) {
                         rvTasks.visibility = View.GONE
                         emptyState.visibility = View.VISIBLE
                     } else {
                         rvTasks.visibility = View.VISIBLE
                         emptyState.visibility = View.GONE
 
-                        val adapter = SimpleTaskAdapter(titulosDeTareas) { tituloClickeado ->
+                        // Configuramos el TaskAdapter universal pasándole el ID al hacer clic
+                        val adapter = TaskAdapter(listaTareas) { idClickeado ->
                             val intent = Intent(this@TaskListActivity, DetalleTarea::class.java)
-                            intent.putExtra("TITULO_DE_LA_TAREA", tituloClickeado)
+                            intent.putExtra("ID_DE_LA_TAREA", idClickeado) // Enviamos el ID seguro
                             startActivity(intent)
                         }
                         rvTasks.adapter = adapter
@@ -86,34 +90,5 @@ class TaskListActivity : AppCompatActivity() {
                     Toast.makeText(this, "Error al cargar las tareas", Toast.LENGTH_SHORT).show()
                 }
         }
-    }
-
-    // --- CLASE ADAPTADOR PARA EL RECYCLERVIEW ---
-    class SimpleTaskAdapter(
-        private val tasks: List<String>,
-        private val onTaskClick: (String) -> Unit
-    ) : RecyclerView.Adapter<SimpleTaskAdapter.TaskViewHolder>() {
-
-        class TaskViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val textView: TextView = view.findViewById(android.R.id.text1)
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
-            val view = LayoutInflater.from(parent.context).inflate(android.R.layout.simple_list_item_1, parent, false)
-            return TaskViewHolder(view)
-        }
-
-        override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-            val titulo = tasks[position]
-            holder.textView.text = titulo
-            holder.textView.setTextColor(android.graphics.Color.WHITE)
-
-            // --- ¡CAMBIO AQUÍ! Asignamos el evento de clic a toda la celda ---
-            holder.itemView.setOnClickListener {
-                onTaskClick(titulo) // Ejecuta la función mandando el título correspondiente
-            }
-        }
-
-        override fun getItemCount() = tasks.size
     }
 }

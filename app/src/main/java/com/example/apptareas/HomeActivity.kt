@@ -6,14 +6,11 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,16 +18,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import android.Manifest
-
 import android.provider.Settings
-
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,15 +99,22 @@ class HomeActivity : AppCompatActivity() {
             db.collection("Usuarios").document(uid).collection("Mis_Tareas")
                 .get()
                 .addOnSuccessListener { resultado ->
-                    val titulosDeTareas = mutableListOf<String>()
+
+                    // --- CAMBIOS: Usamos la lista de objetos Task ---
+                    val listaTareas = mutableListOf<Task>()
                     var completadas = 0
                     var pendientes = 0
 
                     for (documento in resultado) {
+                        // Obtenemos los campos y el ID de Firestore
+                        val id = documento.id
                         val titulo = documento.getString("titulo") ?: "Tarea sin título"
-                        titulosDeTareas.add(titulo)
-
+                        val fecha = documento.getString("fecha") ?: "Sin fecha"
                         val estado = documento.getString("estado") ?: "pendiente"
+
+                        // Agregamos el objeto Task a la lista visual
+                        listaTareas.add(Task(id, titulo, fecha, estado))
+
                         if (estado.equals("completado", ignoreCase = true) || estado.equals("completada", ignoreCase = true)) {
                             completadas++
                         } else {
@@ -137,10 +137,10 @@ class HomeActivity : AppCompatActivity() {
                     tvDoneCount.text = "$completadas completadas"
                     tvPendingCount.text = "$pendientes pendientes"
 
-                    //Cargar la lista de tareas en el RecyclerView
-                    val adapter = SimpleTaskAdapter(titulosDeTareas) { tituloClickeado ->
+                    // --- CAMBIO: Usamos el TaskAdapter y enviamos el ID al clic ---
+                    val adapter = TaskAdapter(listaTareas) { idClickeado ->
                         val intent = Intent(this@HomeActivity, DetalleTarea::class.java)
-                        intent.putExtra("TITULO_DE_LA_TAREA", tituloClickeado)
+                        intent.putExtra("ID_DE_LA_TAREA", idClickeado)
                         startActivity(intent)
                     }
                     rvTasks.adapter = adapter
@@ -183,9 +183,8 @@ class HomeActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 100) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
+                // Permiso concedido
             } else {
-                
                 Toast.makeText(
                     this,
                     "Activá las notificaciones para recibir recordatorios",
@@ -194,33 +193,4 @@ class HomeActivity : AppCompatActivity() {
             }
         }
     }
-
-    // --- CLASE ADAPTADOR PARA EL RECYCLERVIEW ---
-    class SimpleTaskAdapter(
-        private val tasks: List<String>,
-        private val onTaskClick: (String) -> Unit
-    ) : RecyclerView.Adapter<SimpleTaskAdapter.TaskViewHolder>() {
-
-        class TaskViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val textView: TextView = view.findViewById(android.R.id.text1)
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
-            val view = LayoutInflater.from(parent.context).inflate(android.R.layout.simple_list_item_1, parent, false)
-            return TaskViewHolder(view)
-        }
-
-        override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-            val titulo = tasks[position]
-            holder.textView.text = titulo
-            holder.textView.setTextColor(android.graphics.Color.WHITE)
-
-            holder.itemView.setOnClickListener {
-                onTaskClick(titulo)
-            }
-        }
-
-        override fun getItemCount() = tasks.size
-    }
 }
-

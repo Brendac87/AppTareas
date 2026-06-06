@@ -40,23 +40,22 @@ class DetalleTarea : AppCompatActivity() {
         // Configurar el botón de volver
         btnBack.setOnClickListener { finish() }
 
-        // 3. Obtener el título que mandamos desde la pantalla anterior
-        val tituloRecibido = intent.getStringExtra("TITULO_DE_LA_TAREA")
+        // 3. CAMBIO: Obtener el ID seguro que mandamos desde la pantalla anterior
+        val idRecibido = intent.getStringExtra("ID_DE_LA_TAREA")
 
-        if (tituloRecibido != null) {
+        if (idRecibido != null) {
             val currentUser = auth.currentUser
             if (currentUser != null) {
                 val uid = currentUser.uid
 
-                // 4. Buscar en Firestore la tarea
-                db.collection("Usuarios").document(uid).collection("Mis_Tareas")
-                    .whereEqualTo("titulo", tituloRecibido)
-                    .limit(1)
+                // 4. CAMBIO: Buscar en Firestore directamente por el ID del documento
+                db.collection("Usuarios").document(uid)
+                    .collection("Mis_Tareas").document(idRecibido) // Búsqueda directa
                     .get()
-                    .addOnSuccessListener { documentos ->
-                        if (!documentos.isEmpty) {
+                    .addOnSuccessListener { tarea ->
 
-                            val tarea = documentos.documents[0]
+                        // Verificamos si el documento existe directamente
+                        if (tarea.exists()) {
 
                             // Guardamos el ID del documento en Firebase para poder actualizarlo luego
                             val idDocumento = tarea.id
@@ -110,7 +109,7 @@ class DetalleTarea : AppCompatActivity() {
                     }
             }
         } else {
-            Toast.makeText(this, "Error: No llegó el título de la tarea", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Error: No llegó el ID de la tarea", Toast.LENGTH_SHORT).show()
         }
     }
 }
