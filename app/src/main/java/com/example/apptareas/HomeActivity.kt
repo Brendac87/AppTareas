@@ -1,28 +1,52 @@
 package com.example.apptareas
 
+import android.app.AlarmManager
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import android.Manifest
+
+import android.provider.Settings
+
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home)
+
+        //notificacion crear canal, pedir los permisos para mostrar notif
+        NotificationUtil.createChannel(this)
+        pedirPermisos()
+
+        //prueba borrar despues
+        NotificationUtil.scheduleReminder(
+            context       = this,
+            taskId        = "test_001",
+            taskName      = "Esta es una tarea de prueba",
+            dueTimeMillis = 0L
+        )
 
         // 1. Inicializar Firebase
         auth = FirebaseAuth.getInstance()
@@ -127,6 +151,50 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    // ---parte de los permisos de las notificaciones---
+
+    private fun pedirPermisos() {
+        //permiso de notificaciones (Android 13+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    100
+                )
+            }
+        }
+
+        //permiso de alarma exacta (Android 12+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val alarmManager = getSystemService(AlarmManager::class.java)
+            if (!alarmManager.canScheduleExactAlarms()) {
+                val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+                startActivity(intent)
+            }
+        }
+    }
+
+    //resultado del permiso de notificaciones
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 100) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            } else {
+                
+                Toast.makeText(
+                    this,
+                    "Activá las notificaciones para recibir recordatorios",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+
     // --- CLASE ADAPTADOR PARA EL RECYCLERVIEW ---
     class SimpleTaskAdapter(
         private val tasks: List<String>,
@@ -155,3 +223,4 @@ class HomeActivity : AppCompatActivity() {
         override fun getItemCount() = tasks.size
     }
 }
+
