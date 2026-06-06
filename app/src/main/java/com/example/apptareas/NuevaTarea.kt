@@ -17,9 +17,12 @@ class NuevaTarea : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
 
-    // Variables para guardar lo que el usuario elija
+    // Variables dinámicas para guardar lo que el usuario elija
     private var prioridadSeleccionada = "Alta"
     private var categoriaSeleccionada = "Estudios"
+    // --- VARIABLES NUEVAS PARA FECHA Y HORA ---
+    private var fechaSeleccionada = "Sin fecha"
+    private var horaSeleccionada = "Sin hora"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,8 +51,48 @@ class NuevaTarea : AppCompatActivity() {
         val btnCatHobbies = findViewById<TextView>(R.id.btnCatHobbies)
         val btnCatOtros = findViewById<TextView>(R.id.btnCatOtros)
 
+        // 5. Conectar selectores de Fecha y Hora (NUEVO)
+        val tvDate = findViewById<TextView>(R.id.tvDate)
+        val tvTime = findViewById<TextView>(R.id.tvTime)
+
         // Lista de categorías para manejarlas más fácilmente en un bucle
         val listaCategorias = listOf(btnCatEstudios, btnCatTrabajo, btnCatPersonal, btnCatCompras, btnCatHobbies, btnCatOtros)
+
+
+        // --- LÓGICA DEL SELECTOR DE FECHA (DatePicker) ---
+        // Al tocar el recuadro de fecha, abrimos el calendario del sistema
+        tvDate.setOnClickListener {
+            val calendario = java.util.Calendar.getInstance()
+            val anio = calendario.get(java.util.Calendar.YEAR)
+            val mes = calendario.get(java.util.Calendar.MONTH)
+            val dia = calendario.get(java.util.Calendar.DAY_OF_MONTH)
+
+            val datePickerDialog = android.app.DatePickerDialog(this, { _, yearSelected, monthSelected, daySelected ->
+                val mesReal = monthSelected + 1 // Los meses empiezan en 0 en Java
+                fechaSeleccionada = "$daySelected/$mesReal/$yearSelected"
+                tvDate.text = fechaSeleccionada // Actualizamos la vista
+            }, anio, mes, dia)
+
+            datePickerDialog.show()
+        }
+
+        // --- LÓGICA DEL SELECTOR DE HORA (TimePicker) ---
+        // Al tocar el recuadro de hora, abrimos el reloj del sistema
+        tvTime.setOnClickListener {
+            val calendario = java.util.Calendar.getInstance()
+            val hora = calendario.get(java.util.Calendar.HOUR_OF_DAY)
+            val minuto = calendario.get(java.util.Calendar.MINUTE)
+
+            val timePickerDialog = android.app.TimePickerDialog(this, { _, hourSelected, minuteSelected ->
+                // Formateamos para que siempre tenga 2 dígitos (ej: 09:05)
+                val horaFormateada = String.format("%02d:%02d", hourSelected, minuteSelected)
+                horaSeleccionada = horaFormateada
+                tvTime.text = horaSeleccionada // Actualizamos la vista
+            }, hora, minuto, false) // false indica que usamos formato de 12 horas (AM/PM)
+
+            timePickerDialog.show()
+        }
+
 
         // --- LÓGICA DE SELECCIÓN DE PRIORIDAD ---
         fun seleccionarPrioridad(prioridad: String) {
@@ -124,15 +167,14 @@ class NuevaTarea : AppCompatActivity() {
                 val uid = currentUser.uid
                 val idTarea = UUID.randomUUID().toString()
 
-                // Guardamos las variables dinámicas 'prioridadSeleccionada' y 'categoriaSeleccionada'
                 val tareaData = hashMapOf(
                     "id" to idTarea,
                     "titulo" to titulo,
                     "descripcion" to descripcion,
-                    "fecha" to "02 de Junio, 2026", // Fijo temporalmente
-                    "hora" to "07:30 PM",          // Fijo temporalmente
-                    "prioridad" to prioridadSeleccionada, // ¡Dinámico!
-                    "categoria" to categoriaSeleccionada, // ¡Dinámico!
+                    "fecha" to fechaSeleccionada,
+                    "hora" to horaSeleccionada,
+                    "prioridad" to prioridadSeleccionada,
+                    "categoria" to categoriaSeleccionada,
                     "estado" to "pendiente",
                     "ubicacion" to null,
                     "foto" to null
@@ -148,6 +190,9 @@ class NuevaTarea : AppCompatActivity() {
                     .addOnFailureListener { e ->
                         Toast.makeText(this, "Error al guardar: ${e.message}", Toast.LENGTH_LONG).show()
                     }
+            } else {
+                // AGREGAMOS ESTO PARA DETECTAR EL PROBLEMA
+                Toast.makeText(this, "Error: No hay una sesión de usuario activa", Toast.LENGTH_LONG).show()
             }
         }
     }

@@ -8,10 +8,8 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:paddingBottom="120dp"
-        android:clipToPadding="false"
-        >
+        android:layout_marginBottom="80dp" android:fillViewport="true"
+        android:paddingBottom="90dp" android:clipToPadding="false">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,23 +32,17 @@
                     android:layout_weight="1"
                     android:text="Mis Tareas"
                     android:textColor="#FFFFFF"
-
                     android:textSize="22sp"
                     android:textStyle="bold" />
 
                 <ImageButton
-                android:id="@+id/btnSearch"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@drawable/bg_glass_input"
-                android:src="@drawable/ic_search"
-                android:contentDescription="Buscar"
-                android:padding="12dp" />
-
-
-
-
-
+                    android:id="@+id/btnSearch"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/bg_glass_input"
+                    android:src="@drawable/ic_search"
+                    android:contentDescription="Buscar"
+                    android:padding="12dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -87,7 +79,6 @@
                     android:inputType="text"
                     android:imeOptions="actionSearch"
                     android:singleLine="true"/>
-
             </LinearLayout>
 
             <HorizontalScrollView
@@ -106,7 +97,6 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
 
-                    <!--filtros-->
                     <TextView
                         android:id="@+id/filterAll"
                         android:layout_width="wrap_content"
@@ -123,7 +113,6 @@
                         android:clickable="true"
                         android:focusable="true"/>
 
-                    <!-- filtro para pendientes -->
                     <TextView
                         android:id="@+id/chipPending"
                         android:layout_width="wrap_content"
@@ -140,7 +129,6 @@
                         android:clickable="true"
                         android:focusable="true"/>
 
-                    <!--compl -->
                     <TextView
                         android:id="@+id/chipDone"
                         android:layout_width="wrap_content"
@@ -157,7 +145,6 @@
                         android:clickable="true"
                         android:focusable="true"/>
 
-                    <!--prioridad alta-->
                     <TextView
                         android:id="@+id/chipHigh"
                         android:layout_width="wrap_content"
@@ -174,7 +161,6 @@
                         android:clickable="true"
                         android:focusable="true"/>
 
-                    <!--m-->
                     <TextView
                         android:id="@+id/chipMedium"
                         android:layout_width="wrap_content"
@@ -191,7 +177,6 @@
                         android:clickable="true"
                         android:focusable="true"/>
 
-                    <!--b-->
                     <TextView
                         android:id="@+id/chipLow"
                         android:layout_width="wrap_content"
@@ -206,10 +191,8 @@
                         android:background="@drawable/bg_f_inactive"
                         android:clickable="true"
                         android:focusable="true"/>
-
                 </LinearLayout>
             </HorizontalScrollView>
-
 
             <TextView
                 android:id="@+id/labelPending"
@@ -233,7 +216,6 @@
                 android:nestedScrollingEnabled="false"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-
             <LinearLayout
                 android:id="@+id/emptyState"
                 android:layout_width="match_parent"
@@ -243,8 +225,6 @@
                 android:paddingTop="48dp"
                 android:paddingBottom="48dp"
                 android:visibility="gone">
-
-
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -262,20 +242,9 @@
                     android:text="Tocá el + para crear una nueva"
                     android:textColor="#59FFFFFF"
                     android:textSize="13sp"/>
-
             </LinearLayout>
-
-
-
-
-
-
-
         </LinearLayout>
-
-
     </androidx.core.widget.NestedScrollView>
-
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
@@ -283,34 +252,23 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@drawable/bg_bottom_nav"
-        app:labelVisibilityMode="labeled"
         app:elevation="0dp"
-        app:menu="@menu/bottom_nav_menu"
-        app:itemIconSize="26dp"
-        app:itemTextColor="@color/bottom_nav"
-
-        app:itemIconTint="@color/bottom_nav"
         app:itemActiveIndicatorStyle="@android:style/Widget.DeviceDefault"
+        app:itemIconSize="26dp"
+        app:itemIconTint="@color/bottom_nav"
+        app:itemTextColor="@color/bottom_nav"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_menu" />
 
-        >
-
-
-
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="120dp"
-        android:layout_marginEnd="20dp"
-
-
+        android:layout_marginBottom="80dp" android:layout_marginEnd="20dp"
         app:icon="@drawable/ic_add"
         app:iconTint="#FFFFFF"
         app:backgroundTint="#B388FF"
         app:elevation="6dp"/>
-
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
