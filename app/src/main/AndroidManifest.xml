@@ -39,6 +39,9 @@
             android:name=".CreateProfileActivity"
             android:exported="false" />
         <activity
+            android:name=".EditarTarea"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

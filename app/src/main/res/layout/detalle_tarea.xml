@@ -44,7 +44,7 @@
                     android:layout_height="48dp"
                     android:layout_alignParentEnd="true"
                     android:background="@drawable/bg_glass_input"
-                    android:src="@android:drawable/ic_menu_more"
+                    android:src="@android:drawable/ic_menu_edit"
                     android:contentDescription="@string/desc_boton_opciones"
                     app:tint="#FFFFFF" />
             </RelativeLayout>
@@ -268,17 +268,28 @@
         android:id="@+id/bottom_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_cancelar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_glass_input"
+            android:text="Cancelar Tarea"
+            android:textAllCaps="false"
+            android:textColor="#F44336"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_completar"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_weight="1"
             android:background="@drawable/bg_button_gradient"
             android:text="@string/btn_marcar_completada"
             android:textColor="#FFFFFF"

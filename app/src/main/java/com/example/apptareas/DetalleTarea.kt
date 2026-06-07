@@ -1,5 +1,6 @@
 package com.example.apptareas
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -7,6 +8,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -26,6 +28,8 @@ class DetalleTarea : AppCompatActivity() {
 
         // 2. Conectar las vistas de tu XML
         val btnBack = findViewById<ImageButton>(R.id.btn_back)
+        val btnOptions = findViewById<ImageButton>(R.id.btn_options)
+        val btnCancelar = findViewById<Button>(R.id.btn_cancelar)
         val tvTitulo = findViewById<TextView>(R.id.tv_titulo_tarea)
         val tvDescripcion = findViewById<TextView>(R.id.tv_descripcion_tarea)
         val tvPrioridad = findViewById<TextView>(R.id.tv_prioridad)
@@ -68,19 +72,68 @@ class DetalleTarea : AppCompatActivity() {
                             tvFecha.text = tarea.getString("fecha") ?: "--/--/----"
                             tvHora.text = tarea.getString("hora") ?: "--:--"
 
-                            // --- LÓGICA DEL ESTADO Y BOTÓN ---
+                            // --- LÓGICA DEL ESTADO Y BOTONES ---
                             val estadoActual = tarea.getString("estado") ?: "pendiente"
-                            tvEstado.text = estadoActual.uppercase() // Lo ponemos en MAYÚSCULAS
+                            tvEstado.text = estadoActual.uppercase()
 
-                            // Ignoramos mayúsculas/minúsculas por si acaso
+                            // Verificamos el estado para configurar la pantalla
                             if (estadoActual.equals("completado", ignoreCase = true) || estadoActual.equals("completada", ignoreCase = true)) {
-                                // Si está completada: Color verde vibrante y ocultamos el botón
+                                // Si está completada: Color verde vibrante y ocultamos los botones
                                 tvEstado.setTextColor(Color.parseColor("#4CAF50"))
                                 btnCompletar.visibility = View.GONE
+                                btnCancelar.visibility = View.GONE
+                                btnOptions.visibility = View.GONE
+
+                            } else if (estadoActual.equals("cancelado", ignoreCase = true) || estadoActual.equals("cancelada", ignoreCase = true)) {
+                                // Si está cancelada: Color rojo y ocultamos los botones
+                                tvEstado.setTextColor(Color.parseColor("#F44336"))
+                                btnCompletar.visibility = View.GONE
+                                btnCancelar.visibility = View.GONE
+                                btnOptions.visibility = View.GONE
+
                             } else {
-                                // Si está pendiente: Color amarillo y mostramos el botón
                                 tvEstado.setTextColor(Color.parseColor("#FFC107"))
                                 btnCompletar.visibility = View.VISIBLE
+                                btnCancelar.visibility = View.VISIBLE
+                                btnOptions.visibility = View.VISIBLE
+                            }
+
+                            // --- FUNCIONALIDAD DEL BOTÓN CANCELAR CON ALERTA ---
+                            btnCancelar.setOnClickListener {
+                                //cuadro de diálogo
+                                val builder = AlertDialog.Builder(this)
+                                builder.setTitle("¿Cancelar tarea?")
+                                builder.setMessage("¿Estás seguro de que deseas cancelar esta tarea? Ya no podrás editarla ni marcarla como completada.")
+                                //Opcion "si"
+                                builder.setPositiveButton("Sí, cancelar") { dialog, _ ->
+
+                                    // cambiio de estado a cancelado
+                                    db.collection("Usuarios").document(uid)
+                                        .collection("Mis_Tareas").document(idDocumento)
+                                        .update("estado", "cancelado")
+                                        .addOnSuccessListener {
+                                            Toast.makeText(this, "Tarea cancelada", Toast.LENGTH_SHORT).show()
+                                            // actualizacion de pagina
+                                            tvEstado.text = "CANCELADO"
+                                            tvEstado.setTextColor(android.graphics.Color.parseColor("#F44336"))
+                                            btnCompletar.visibility = View.GONE
+                                            btnCancelar.visibility = View.GONE
+                                            btnOptions.visibility = View.GONE
+                                        }
+                                        .addOnFailureListener { error ->
+                                            Toast.makeText(this, "Error al cancelar: ${error.message}", Toast.LENGTH_SHORT).show()
+                                        }
+
+                                    dialog.dismiss() // Cerramos el cuadro de diálogo
+                                }
+
+                                // Opcion "no"
+                                builder.setNegativeButton("No, mantener") { dialog, _ ->
+                                    dialog.dismiss()
+                                }
+                                //Mostramos el cuadro en pantalla
+                                val alertDialog = builder.create()
+                                alertDialog.show()
                             }
 
                             // --- FUNCIONALIDAD DEL BOTÓN COMPLETAR ---
@@ -91,15 +144,14 @@ class DetalleTarea : AppCompatActivity() {
                                     .update("estado", "completado")
                                     .addOnSuccessListener {
                                         Toast.makeText(this, "¡Tarea completada!", Toast.LENGTH_SHORT).show()
-
-                                        // Volvemos automáticamente a la lista de tareas
-                                        finish()
+                                        tvEstado.text = "COMPLETADO"
+                                        tvEstado.setTextColor(Color.parseColor("#4CAF50"))
+                                        btnCompletar.visibility = View.GONE
                                     }
                                     .addOnFailureListener { error ->
                                         Toast.makeText(this, "Error al actualizar: ${error.message}", Toast.LENGTH_SHORT).show()
                                     }
                             }
-
                         } else {
                             Toast.makeText(this, "No se encontró la tarea en la base de datos", Toast.LENGTH_SHORT).show()
                         }
@@ -107,6 +159,12 @@ class DetalleTarea : AppCompatActivity() {
                     .addOnFailureListener { error ->
                         Toast.makeText(this, "Error de conexión: ${error.message}", Toast.LENGTH_SHORT).show()
                     }
+            }
+            // --BOTON EDITAR--
+            btnOptions.setOnClickListener {
+                val intentEditar = Intent(this, EditarTarea::class.java)
+                intentEditar.putExtra("ID_DE_LA_TAREA", idRecibido)
+                startActivity(intentEditar)
             }
         } else {
             Toast.makeText(this, "Error: No llegó el ID de la tarea", Toast.LENGTH_SHORT).show()
