@@ -39,7 +39,7 @@ object NavigationUtils {
                 }
 
                 R.id.nav_not -> {
-                    // Agregar vista de notificacion luego
+
                     true
                 }
 

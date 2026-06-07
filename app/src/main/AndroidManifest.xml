@@ -27,6 +27,7 @@
         <activity
             android:name=".NuevaTarea"
             android:exported="false" />
+
         <activity
             android:name=".DetalleTarea"
             android:exported="false" />
