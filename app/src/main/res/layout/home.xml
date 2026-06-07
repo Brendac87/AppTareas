@@ -154,12 +154,9 @@
                         android:gravity="center_vertical">
 
                         <View
-                            android:id="@+id/dotComp"
                             android:layout_width="8dp"
                             android:layout_height="8dp"
-                            android:layout_marginStart="8dp"
-                            android:background="@drawable/ic_dot"
-                            android:backgroundTint="#09C709" android:visibility="visible"/>
+                            android:background="#33691E" />
 
                         <TextView
                             android:id="@+id/tvDoneCount"
@@ -172,12 +169,10 @@
                             android:textStyle="bold" />
 
                         <View
-                            android:id="@+id/dotInc"
                             android:layout_width="8dp"
                             android:layout_height="8dp"
-                            android:layout_marginStart="8dp"
-                            android:background="@drawable/ic_dot"
-                            android:backgroundTint="#FBC810" android:visibility="visible"/>
+                            android:layout_marginStart="16dp"
+                            android:background="#F57F17" />
 
                         <TextView
                             android:id="@+id/tvPendingCount"

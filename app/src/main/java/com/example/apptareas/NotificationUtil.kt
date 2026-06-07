@@ -50,8 +50,8 @@ object NotificationUtil {
         //--------------------prueba----------------------
         val triggerAt = System.currentTimeMillis() + 10000
 
-        //Log.d("NOTIF", "Programando notificación para: $taskName")
-        //Log.d("NOTIF", "En 10 segundos: $triggerAt")
+        Log.d("NOTIF", "Programando notificación para: $taskName")
+        Log.d("NOTIF", "En 10 segundos: $triggerAt")
 
         //--------------------fin prueba----------------------
 
