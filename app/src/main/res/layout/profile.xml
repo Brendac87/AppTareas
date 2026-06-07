@@ -9,11 +9,10 @@
 
 
 <androidx.core.widget.NestedScrollView
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    android:fillViewport="true"
+    android:layout_marginBottom="80dp" android:fillViewport="true"
+    android:paddingBottom="90dp"       android:clipToPadding="false"
 
     >
     <LinearLayout
@@ -430,7 +429,6 @@
         app:menu="@menu/bottom_nav_menu"
         app:itemIconSize="26dp"
         app:itemTextColor="@color/bottom_nav"
-
         app:itemIconTint="@color/bottom_nav"
         app:itemActiveIndicatorStyle="@android:style/Widget.DeviceDefault"
 
