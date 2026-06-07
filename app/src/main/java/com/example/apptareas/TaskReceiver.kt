@@ -11,6 +11,8 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class TaskReceiver : BroadcastReceiver() {
 
@@ -20,28 +22,22 @@ class TaskReceiver : BroadcastReceiver() {
         val taskId = intent.getStringExtra("task_id") ?: ""
 
         //al tocar la notificacion abre la app
-        val openAppIntent = Intent(context, HomeActivity::class.java).apply {
+        val openAppIntent = Intent(context, NotificationsActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putExtra("task_id", taskId)
         }
-
         val pendingIntent = PendingIntent.getActivity(
-            context,
-            taskId.hashCode(),
-            openAppIntent,
+            context, taskId.hashCode(), openAppIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         //builder para la notificacion
         val notification = NotificationCompat.Builder(context, "task_channel")
-            .setSmallIcon(R.drawable.ic_not)
+            .setSmallIcon(R.drawable.ic_alarm)
             .setContentTitle("Tarea por vencer")
             .setContentText(taskName)
-            .setSubText("Vence en 30 minutos")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
-            .setVibrate(longArrayOf(0, 300, 100, 300))
             .build()
 
         //validacion interna:
@@ -62,5 +58,20 @@ class TaskReceiver : BroadcastReceiver() {
             //Android 12 o inferior, el permiso  concedido al instalar la app
             NotificationManagerCompat.from(context).notify(taskId.hashCode(), notification)
         }
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val db  = FirebaseFirestore.getInstance()
+
+        val notifData = hashMapOf(
+            "taskId"    to taskId,
+            "titulo"    to taskName,
+            "subtitle"  to "Tarea por vencer",
+            "timestamp" to System.currentTimeMillis(),
+            "leida"     to false
+        )
+
+        db.collection("Usuarios").document(uid)
+            .collection("Notificaciones")
+            .add(notifData)
     }
 }
+
