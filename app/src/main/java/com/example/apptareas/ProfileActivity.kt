@@ -65,6 +65,36 @@ class ProfileActivity : AppCompatActivity() {
             .setOnClickListener {
                 startActivity(Intent(this, EditProfileActivity::class.java))
             }
+        findViewById<com.google.android.material.button.MaterialButton>(R.id.btnEditProfile)
+            .setOnClickListener {
+                startActivity(Intent(this, EditProfileActivity::class.java))
+            }
+
+        //notificaciones es un toast de momento
+        findViewById<androidx.cardview.widget.CardView>(R.id.optNotifications)
+            .setOnClickListener {
+                Toast.makeText(this, "Próximamente", Toast.LENGTH_SHORT).show()
+            }
+
+        //para ayuda un dialogo simple
+        findViewById<androidx.cardview.widget.CardView>(R.id.optHelp)
+            .setOnClickListener {
+                androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Ayuda")
+                    .setMessage("Para dudas o soporte, escribinos a:\n\nsoporte@apptareas.com")
+                    .setPositiveButton("Cerrar", null)
+                    .show()
+            }
+
+        //cerrar sesin
+        findViewById<androidx.cardview.widget.CardView>(R.id.optLogout)
+            .setOnClickListener {
+                FirebaseAuth.getInstance().signOut()
+                val intent = Intent(this, LoginActivity::class.java)
+                //limpia el historial de actividades asi no puede volver atras usando el boton del celular
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            }
 
     }
 }
