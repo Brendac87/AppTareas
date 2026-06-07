@@ -34,7 +34,6 @@ class HomeActivity : AppCompatActivity() {
         pedirPermisos()
 
         //prueba borrar despues
-
         NotificationUtil.scheduleReminder(
             context       = this,
             taskId        = "test_001",
