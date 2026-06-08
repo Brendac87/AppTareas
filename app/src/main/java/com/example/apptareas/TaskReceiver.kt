@@ -7,10 +7,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import org.json.JSONArray
+import org.json.JSONObject
+import java.util.UUID
 
 class TaskReceiver : BroadcastReceiver() {
 
@@ -18,6 +20,9 @@ class TaskReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val taskName = intent.getStringExtra("task_name") ?: "Tarea pendiente"
         val taskId = intent.getStringExtra("task_id") ?: ""
+
+        // 1. Guardamos la notificación en SharedPreferences para la vista in-app
+        guardarNotificacionLocal(context, taskName, taskId)
 
         //al tocar la notificacion abre la app
         val openAppIntent = Intent(context, HomeActivity::class.java).apply {
@@ -62,5 +67,27 @@ class TaskReceiver : BroadcastReceiver() {
             //Android 12 o inferior, el permiso  concedido al instalar la app
             NotificationManagerCompat.from(context).notify(taskId.hashCode(), notification)
         }
+    }
+
+    private fun guardarNotificacionLocal(context: Context, taskName: String, taskId: String) {
+        val prefs = context.getSharedPreferences("notificaciones", Context.MODE_PRIVATE)
+        val arrayStr = prefs.getString("lista", "[]")
+        val array = JSONArray(arrayStr)
+
+        //creamos el objeto JSON con la misma estructura que lee NotificationActivity
+        val nuevaNotif = JSONObject().apply {
+            put("id", UUID.randomUUID().toString())
+            put("titulo", "Tarea por vencer")
+            put("subtitle", taskName)
+            put("timestamp", System.currentTimeMillis())
+            put("leida", false)
+            put("taskId", taskId)
+        }
+
+        //agrega al final de la lista
+        array.put(nuevaNotif)
+
+
+        prefs.edit().putString("lista", array.toString()).apply()
     }
 }
