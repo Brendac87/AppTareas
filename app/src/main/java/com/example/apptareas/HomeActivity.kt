@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import android.Manifest
 import android.provider.Settings
+import java.util.Calendar
 
 class HomeActivity : AppCompatActivity() {
 
@@ -95,12 +96,22 @@ class HomeActivity : AppCompatActivity() {
                     }
                 }
 
-            //Buscar las tareas para la lista y el progreso
+            //-- Buscar las tareas para la lista y el progreso--
+            //Obtenemos la fecha exacta de hoy en formato "d/m/yyyy"
+            val cal = Calendar.getInstance()
+            val dia = cal.get(Calendar.DAY_OF_MONTH)
+            val mes = cal.get(Calendar.MONTH) + 1
+            val anio = cal.get(Calendar.YEAR)
+
+            val fechaHoy = String.format("%02d/%02d/%04d", dia, mes, anio)
+            Toast.makeText(this, "Home buscando tareas de: $fechaHoy", Toast.LENGTH_LONG).show()
+
+            //Buscamos en Firebase con la nueva fecha estandarizada
             db.collection("Usuarios").document(uid).collection("Mis_Tareas")
+                .whereEqualTo("fecha", fechaHoy)
                 .get()
                 .addOnSuccessListener { resultado ->
 
-                    // --- CAMBIOS: Usamos la lista de objetos Task ---
                     val listaTareas = mutableListOf<Task>()
                     var completadas = 0
                     var pendientes = 0
@@ -111,10 +122,12 @@ class HomeActivity : AppCompatActivity() {
                         val titulo = documento.getString("titulo") ?: "Tarea sin título"
                         val fecha = documento.getString("fecha") ?: "Sin fecha"
                         val estado = documento.getString("estado") ?: "pendiente"
+                        val prioridad = documento.getString("prioridad") ?: "Baja"
 
                         // Agregamos el objeto Task a la lista visual
-                        listaTareas.add(Task(id, titulo, fecha, estado))
+                        listaTareas.add(Task(id, titulo, fecha, estado, prioridad))
 
+                        // Contamos los estados (ahora la barra de progreso será exclusiva de HOY)
                         if (estado.equals("completado", ignoreCase = true) || estado.equals("completada", ignoreCase = true)) {
                             completadas++
                         } else {

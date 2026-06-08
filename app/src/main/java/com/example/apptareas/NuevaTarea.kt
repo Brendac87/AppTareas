@@ -69,7 +69,7 @@ class NuevaTarea : AppCompatActivity() {
 
             val datePickerDialog = android.app.DatePickerDialog(this, { _, yearSelected, monthSelected, daySelected ->
                 val mesReal = monthSelected + 1 // Los meses empiezan en 0 en Java
-                fechaSeleccionada = "$daySelected/$mesReal/$yearSelected"
+                fechaSeleccionada = String.format("%02d/%02d/%04d", daySelected, mesReal, yearSelected)
                 tvDate.text = fechaSeleccionada // Actualizamos la vista
             }, anio, mes, dia)
 

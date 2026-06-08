@@ -109,8 +109,12 @@ class EditarTarea : AppCompatActivity() {
         tvDate.setOnClickListener {
             val cal = Calendar.getInstance()
             android.app.DatePickerDialog(this, { _, year, month, day ->
-                fechaSeleccionada = "$day/${month + 1}/$year"
+                val mesReal = month + 1
+
+                // --- CAMBIO AQUÍ: Formato estricto forzado a 2 dígitos ---
+                fechaSeleccionada = String.format("%02d/%02d/%04d", day, mesReal, year)
                 tvDate.text = fechaSeleccionada
+
             }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show()
         }
 

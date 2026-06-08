@@ -146,6 +146,22 @@
                         android:focusable="true"/>
 
                     <TextView
+                        android:id="@+id/chipCanceled"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:layout_marginEnd="8dp"
+                        android:gravity="center"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:text="Canceladas"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#80FFFFFF"
+                        android:background="@drawable/bg_f_inactive"
+                        android:clickable="true"
+                        android:focusable="true"/>
+
+                    <TextView
                         android:id="@+id/chipHigh"
                         android:layout_width="wrap_content"
                         android:layout_height="32dp"
