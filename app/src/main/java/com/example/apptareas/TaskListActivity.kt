@@ -133,7 +133,7 @@ class TaskListActivity : AppCompatActivity() {
                         listaOriginal.add(Task(id, titulo, fecha, estado, prioridad))
                     }
 
-                    // Al terminar de cargar la base de datos, aplicamos todo por primera vez
+                    // Al terminar de cargar la base de datos, aplicamos tod por primera vez
                     aplicarFiltros(labelPending, emptyState, rvTasks)
                 }
                 .addOnFailureListener {

@@ -1,4 +1,5 @@
 package com.example.apptareas
+
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -25,13 +26,19 @@ class ProfileActivity : AppCompatActivity() {
 
         val userNameTextView = findViewById<TextView>(R.id.userName)
         val userEmailTextView = findViewById<TextView>(R.id.userEmail)
-        //Usuario
+
+        // --- NUEVO: Conectamos las vistas de las estadísticas ---
+        val tvStatDone = findViewById<TextView>(R.id.tvStatDone)
+        val tvStatPending = findViewById<TextView>(R.id.tvStatPending)
+
+        // Usuario
         val currentUser = auth.currentUser
 
         if (currentUser != null) {
             // El usuario está logueado, obtenemos su UID
             val uid = currentUser.uid
 
+            // 1. Obtener datos del perfil (Tu código original)
             db.collection("Usuarios").document(uid).get()
                 .addOnSuccessListener { document ->
                     if (document != null && document.exists()) {
@@ -53,30 +60,53 @@ class ProfileActivity : AppCompatActivity() {
                     Log.e("FirestoreError", "Error al obtener datos", exception)
                     Toast.makeText(this, "Error al cargar el perfil", Toast.LENGTH_SHORT).show()
                 }
+
+            // --- NUEVO: 2. Obtener y calcular las estadísticas de las tareas ---
+            db.collection("Usuarios").document(uid).collection("Mis_Tareas")
+                .get()
+                .addOnSuccessListener { resultado ->
+                    var completadas = 0
+                    var pendientes = 0
+
+                    for (documento in resultado) {
+                        val estado = documento.getString("estado") ?: "pendiente"
+
+                        if (estado.equals("completado", ignoreCase = true) || estado.equals("completada", ignoreCase = true)) {
+                            completadas++
+                        } else if (estado.equals("pendiente", ignoreCase = true)) {
+                            pendientes++
+                        }
+                    }
+
+                    // Actualizamos la interfaz
+                    tvStatDone.text = completadas.toString()
+                    tvStatPending.text = pendientes.toString()
+                }
+                .addOnFailureListener {
+                    Log.e("FirestoreError", "Error al obtener estadísticas")
+                }
+
         } else {
             Toast.makeText(this, "Sesión no iniciada", Toast.LENGTH_SHORT).show()
         }
-        
+
+        // --- NAVEGACIÓN Y BOTONES ---
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottomNav.selectedItemId = R.id.nav_profile
         NavigationUtils.configurarNavegacion(this, bottomNav)
-        
-        findViewById<com.google.android.material.button.MaterialButton>(R.id.btnEditProfile)
-            .setOnClickListener {
-                startActivity(Intent(this, EditProfileActivity::class.java))
-            }
+
         findViewById<com.google.android.material.button.MaterialButton>(R.id.btnEditProfile)
             .setOnClickListener {
                 startActivity(Intent(this, EditProfileActivity::class.java))
             }
 
-        //notificaciones es un toast de momento
+        // notificaciones es un toast de momento
         findViewById<androidx.cardview.widget.CardView>(R.id.optNotifications)
             .setOnClickListener {
                 Toast.makeText(this, "Próximamente", Toast.LENGTH_SHORT).show()
             }
 
-        //para ayuda un dialogo simple
+        // para ayuda un dialogo simple
         findViewById<androidx.cardview.widget.CardView>(R.id.optHelp)
             .setOnClickListener {
                 androidx.appcompat.app.AlertDialog.Builder(this)
@@ -86,16 +116,14 @@ class ProfileActivity : AppCompatActivity() {
                     .show()
             }
 
-        //cerrar sesin
+        // cerrar sesion
         findViewById<androidx.cardview.widget.CardView>(R.id.optLogout)
             .setOnClickListener {
                 FirebaseAuth.getInstance().signOut()
                 val intent = Intent(this, LoginActivity::class.java)
-                //limpia el historial de actividades asi no puede volver atras usando el boton del celular
+                // limpia el historial de actividades asi no puede volver atras usando el boton del celular
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
             }
-
     }
 }
-
