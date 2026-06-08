@@ -55,47 +55,17 @@
                     android:focusable="true"/>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tvCount"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingStart="10dp"
-                android:paddingEnd="20dp"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp">
+                android:layout_marginStart="14dp"
+                android:layout_marginBottom="10dp"
+                android:text=""
+                android:textColor="#80FFFFFF"
+                android:textSize="11sp"
+                android:textStyle="bold"/>
 
-                <TextView
-                    android:id="@+id/filterAll"
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:layout_marginEnd="8dp"
-                    android:gravity="center"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="Todas"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF"
-                    android:background="@drawable/bg_f_active"
-                    android:clickable="true"
-                    android:focusable="true"/>
-
-                <TextView
-                    android:id="@+id/filterUnread"
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:gravity="center"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="No leídas"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="#80FFFFFF"
-                    android:background="@drawable/bg_f_inactive"
-                    android:clickable="true"
-                    android:focusable="true"/>
-
-            </LinearLayout>
 
             <!--parte para recycler de las notif-->
 
