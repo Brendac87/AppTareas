@@ -77,8 +77,8 @@ class TaskReceiver : BroadcastReceiver() {
         //creamos el objeto JSON con la misma estructura que lee NotificationActivity
         val nuevaNotif = JSONObject().apply {
             put("id", UUID.randomUUID().toString())
-            put("titulo", "Tarea por vencer")
-            put("subtitle", taskName)
+            put("titulo", taskName)
+            put("subtitle", "Tarea por vencer")
             put("timestamp", System.currentTimeMillis())
             put("leida", false)
             put("taskId", taskId)

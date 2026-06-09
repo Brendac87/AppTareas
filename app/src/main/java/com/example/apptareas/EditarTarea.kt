@@ -401,6 +401,21 @@ class EditarTarea : AppCompatActivity() {
                     .update(actualizaciones)
                     .addOnSuccessListener {
                         Toast.makeText(this, "¡Tarea actualizada!", Toast.LENGTH_SHORT).show()
+                        //cancelar la alarma anterior y programar una nueva con la fecha actualizada
+                        NotificationUtil.cancelReminder(this, idRecibido)
+
+                        val tiempoAlarmaMilis = NotificationUtil.parseDateToMillis(
+                            fechaSeleccionada,
+                            horaSeleccionada
+                        )
+                        if (tiempoAlarmaMilis > System.currentTimeMillis()) {
+                            NotificationUtil.scheduleReminder(
+                                context       = this,
+                                taskId        = idRecibido,
+                                taskName      = nuevoTitulo,
+                                dueTimeMillis = tiempoAlarmaMilis
+                            )
+                        }
                         finish()
                     }
                     .addOnFailureListener { e ->
