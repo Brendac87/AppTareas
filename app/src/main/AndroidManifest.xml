@@ -47,6 +47,9 @@
             android:name=".CreateProfileActivity"
             android:exported="false" />
         <activity
+            android:name=".NotificationActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditarTarea"
             android:exported="false" />
         <activity

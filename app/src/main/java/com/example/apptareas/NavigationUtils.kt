@@ -39,6 +39,16 @@ object NavigationUtils {
                 }
 
                 R.id.nav_not -> {
+                    if (actividadActual !is NotificationActivity) {
+                        actividadActual.startActivity(
+                            Intent(
+                                actividadActual,
+                                NotificationActivity::class.java
+                            )
+                        )
+                        actividadActual.overridePendingTransition(0, 0)
+                        actividadActual.finish()
+                    }
 
                     true
                 }
