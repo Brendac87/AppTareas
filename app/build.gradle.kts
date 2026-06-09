@@ -56,4 +56,8 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("org.osmdroid:osmdroid-android:6.1.18")
 }

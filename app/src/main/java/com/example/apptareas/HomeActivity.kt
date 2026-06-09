@@ -1,24 +1,22 @@
 package com.example.apptareas
 
+import android.Manifest
 import android.app.AlarmManager
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.provider.Settings
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import android.Manifest
-import android.provider.Settings
 import java.util.Calendar
 
 class HomeActivity : AppCompatActivity() {
@@ -26,40 +24,39 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
 
+    // --- 1. Subimos las variables de las vistas aquí arriba ---
+    // Así tanto onCreate como onResume pueden modificarlas
+    private lateinit var userName: TextView
+    private lateinit var tvProgressPercent: TextView
+    private lateinit var progressBar: ProgressBar
+    private lateinit var tvDoneCount: TextView
+    private lateinit var tvPendingCount: TextView
+    private lateinit var rvTasks: RecyclerView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home)
 
-        //notificacion crear canal, pedir los permisos para mostrar notif
-        NotificationUtil.createChannel(this)
-        pedirPermisos()
-
-        //prueba borrar despues
-        NotificationUtil.scheduleReminder(
-            context       = this,
-            taskId        = "test_001",
-            taskName      = "Esta es una tarea de prueba",
-            dueTimeMillis = 0L
-        )
-
-        // 1. Inicializar Firebase
+        // Inicializar Firebase
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
-        // 2. Conectar las vistas del perfil
-        val userName = findViewById<TextView>(R.id.userName)
+        // 2. Conectar las vistas a nuestras variables globales
+        userName = findViewById(R.id.userName)
+        tvProgressPercent = findViewById(R.id.tvProgressPercent)
+        progressBar = findViewById(R.id.progressBar)
+        tvDoneCount = findViewById(R.id.tvDoneCount)
+        tvPendingCount = findViewById(R.id.tvPendingCount)
+        rvTasks = findViewById(R.id.rvTasks)
 
-        // 3. Conectar las vistas de progreso
-        val tvProgressPercent = findViewById<TextView>(R.id.tvProgressPercent)
-        val progressBar = findViewById<ProgressBar>(R.id.progressBar)
-        val tvDoneCount = findViewById<TextView>(R.id.tvDoneCount)
-        val tvPendingCount = findViewById<TextView>(R.id.tvPendingCount)
-
-        // 4. Conectar navegación y lista
         val tvSeeAll = findViewById<TextView>(R.id.tvSeeAll)
-        val rvTasks = findViewById<RecyclerView>(R.id.rvTasks)
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
         val fab = findViewById<View>(R.id.fab)
+
+        // Configuración inicial
+        rvTasks.layoutManager = LinearLayoutManager(this)
+        NotificationUtil.createChannel(this)
+        pedirPermisos()
 
         // --- CONFIGURACIÓN DE NAVEGACIÓN ---
         bottomNav.selectedItemId = R.id.nav_home
@@ -75,59 +72,60 @@ class HomeActivity : AppCompatActivity() {
             finish()
         }
 
-        // --- LÓGICA DE FIREBASE ---
+        // ¡Fíjate que ya no descargamos datos en onCreate!
+    }
 
-        rvTasks.layoutManager = LinearLayoutManager(this)
+    // ========================================================
+    // 3. LA MAGIA DE LA ACTUALIZACIÓN AUTOMÁTICA
+    // ========================================================
+    override fun onResume() {
+        super.onResume()
+        // Cada vez que esta pantalla vuelva a estar al frente, cargamos datos frescos
+        cargarDatosDeFirebase()
+    }
 
+    private fun cargarDatosDeFirebase() {
         val currentUser = auth.currentUser
         if (currentUser != null) {
             val uid = currentUser.uid
 
-            //Buscar datos del usuario (Nombre)
+            // --- Buscar datos del usuario (Nombre) ---
             db.collection("Usuarios").document(uid).get()
                 .addOnSuccessListener { documento ->
                     if (documento.exists()) {
                         val nombre = documento.getString("nombre") ?: "Usuario"
                         val apellido = documento.getString("apellido") ?: ""
-
-                        // Recortamos la inicial del apellido si existe
                         val inicial = if (apellido.isNotEmpty()) "${apellido[0]}." else ""
                         userName.text = "$nombre $inicial"
                     }
                 }
 
-            //-- Buscar las tareas para la lista y el progreso--
-            //Obtenemos la fecha exacta de hoy en formato "d/m/yyyy"
+            // --- Buscar las tareas para la lista y el progreso ---
             val cal = Calendar.getInstance()
             val dia = cal.get(Calendar.DAY_OF_MONTH)
             val mes = cal.get(Calendar.MONTH) + 1
             val anio = cal.get(Calendar.YEAR)
-
             val fechaHoy = String.format("%02d/%02d/%04d", dia, mes, anio)
-            Toast.makeText(this, "Home buscando tareas de: $fechaHoy", Toast.LENGTH_LONG).show()
 
-            //Buscamos en Firebase con la nueva fecha estandarizada
             db.collection("Usuarios").document(uid).collection("Mis_Tareas")
                 .whereEqualTo("fecha", fechaHoy)
                 .get()
                 .addOnSuccessListener { resultado ->
 
+                    // Esta lista nueva automáticamente "limpia" la visualización anterior
                     val listaTareas = mutableListOf<Task>()
                     var completadas = 0
                     var pendientes = 0
 
                     for (documento in resultado) {
-                        // Obtenemos los campos y el ID de Firestore
                         val id = documento.id
                         val titulo = documento.getString("titulo") ?: "Tarea sin título"
                         val fecha = documento.getString("fecha") ?: "Sin fecha"
                         val estado = documento.getString("estado") ?: "pendiente"
                         val prioridad = documento.getString("prioridad") ?: "Baja"
 
-                        // Agregamos el objeto Task a la lista visual
                         listaTareas.add(Task(id, titulo, fecha, estado, prioridad))
 
-                        // Contamos los estados (ahora la barra de progreso será exclusiva de HOY)
                         if (estado.equals("completado", ignoreCase = true) || estado.equals("completada", ignoreCase = true)) {
                             completadas++
                         } else {
@@ -150,7 +148,7 @@ class HomeActivity : AppCompatActivity() {
                     tvDoneCount.text = "$completadas completadas"
                     tvPendingCount.text = "$pendientes pendientes"
 
-                    // --- CAMBIO: Usamos el TaskAdapter y enviamos el ID al clic ---
+                    // Cargar el adaptador renovado al RecyclerView
                     val adapter = TaskAdapter(listaTareas) { idClickeado ->
                         val intent = Intent(this@HomeActivity, DetalleTarea::class.java)
                         intent.putExtra("ID_DE_LA_TAREA", idClickeado)
@@ -164,20 +162,13 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    // ---parte de los permisos de las notificaciones---
-
+    // --- LÓGICA DE PERMISOS ---
     private fun pedirPermisos() {
-        //permiso de notificaciones (Android 13+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(
-                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                    100
-                )
+                requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 100)
             }
         }
-
-        //permiso de alarma exacta (Android 12+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val alarmManager = getSystemService(AlarmManager::class.java)
             if (!alarmManager.canScheduleExactAlarms()) {
@@ -187,22 +178,13 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    //resultado del permiso de notificaciones
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 100) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permiso concedido
             } else {
-                Toast.makeText(
-                    this,
-                    "Activá las notificaciones para recibir recordatorios",
-                    Toast.LENGTH_LONG
-                ).show()
+                Toast.makeText(this, "Activá las notificaciones para recibir recordatorios", Toast.LENGTH_LONG).show()
             }
         }
     }

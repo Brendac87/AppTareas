@@ -11,21 +11,81 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.UUID
+import androidx.appcompat.app.AlertDialog
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import android.net.Uri
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
+import com.google.firebase.storage.FirebaseStorage
+import java.io.File
+import org.osmdroid.config.Configuration
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Marker
+import android.widget.LinearLayout
+import android.view.View
 
 class NuevaTarea : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
 
-    // Variables dinámicas para guardar lo que el usuario elija
+    // Variables dinámicas
     private var prioridadSeleccionada = "Alta"
     private var categoriaSeleccionada = "Estudios"
-    // --- VARIABLES NUEVAS PARA FECHA Y HORA ---
+    //Variabels fecha y hora
     private var fechaSeleccionada = "Sin fecha"
     private var horaSeleccionada = "Sin hora"
+    //Variables para la ubicación
+    private var latitudGuardada: Double? = null
+    private var longitudGuardada: Double? = null
+    private var direccionGuardada: String = ""
+    //Variables para la Cámara y Storage
+    private var uriFotoTemporal: Uri? = null
+    private var urlFotoSubida: String? = null
+
+    // Este es el "receptor" que espera a que cierres la cámara
+    private val tomarFotoLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { exito ->
+        if (exito && uriFotoTemporal != null) {
+            // Si la foto se tomó bien, la subimos a Firebase Storage
+            subirFotoAFirebase(uriFotoTemporal!!)
+        } else {
+            Toast.makeText(this, "Se canceló la foto", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun subirFotoAFirebase(archivoUri: Uri) {
+        Toast.makeText(this, "Subiendo foto, por favor espera...", Toast.LENGTH_LONG).show()
+
+        // 1. Creamos la referencia en Firebase Storage
+        val storageRef = FirebaseStorage.getInstance().reference
+        val nombreArchivo = "fotos_tareas/IMG_${System.currentTimeMillis()}.jpg"
+        val fotoRef = storageRef.child(nombreArchivo)
+
+        // 2. Subimos el archivo
+        fotoRef.putFile(archivoUri)
+            .addOnSuccessListener {
+                // 3. Si se sube bien, le pedimos a Firebase el link (URL) público
+                fotoRef.downloadUrl.addOnSuccessListener { uriDescarga ->
+                    urlFotoSubida = uriDescarga.toString() // Guardamos el link
+
+                    // Cambiamos el texto del botón para que el usuario sepa que funcionó
+                    val btnTomarFoto = findViewById<TextView>(R.id.btnTomarFoto)
+                    btnTomarFoto.text = "📸 Foto adjuntada con éxito"
+                    btnTomarFoto.setBackgroundResource(R.drawable.bg_option_selected)
+                }
+            }
+            .addOnFailureListener { error ->
+                Toast.makeText(this, "Error al subir: ${error.message}", Toast.LENGTH_LONG).show()
+                error.printStackTrace()
+            }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Configuration.getInstance().load(applicationContext, getSharedPreferences("osmdroid", MODE_PRIVATE))
         setContentView(R.layout.nueva_tarea)
 
         // 1. Inicializar Firebase
@@ -51,9 +111,13 @@ class NuevaTarea : AppCompatActivity() {
         val btnCatHobbies = findViewById<TextView>(R.id.btnCatHobbies)
         val btnCatOtros = findViewById<TextView>(R.id.btnCatOtros)
 
-        // 5. Conectar selectores de Fecha y Hora (NUEVO)
+        // 5. Conectar selectores de Fecha, Hora, Ubicacion y foto
         val tvDate = findViewById<TextView>(R.id.tvDate)
         val tvTime = findViewById<TextView>(R.id.tvTime)
+        val btnAddLocation = findViewById<TextView>(R.id.btnAddLocation)
+        val btnTomarFoto = findViewById<TextView>(R.id.btnTomarFoto)
+        val layoutPreviewMapa = findViewById<LinearLayout>(R.id.layoutPreviewMapa)
+        val mapViewPreview = findViewById<MapView>(R.id.mapViewPreview)
 
         // Lista de categorías para manejarlas más fácilmente en un bucle
         val listaCategorias = listOf(btnCatEstudios, btnCatTrabajo, btnCatPersonal, btnCatCompras, btnCatHobbies, btnCatOtros)
@@ -140,6 +204,149 @@ class NuevaTarea : AppCompatActivity() {
             textViewSeleccionado.setBackgroundResource(R.drawable.bg_option_selected)
         }
 
+        //--- LOGICA DE UBICACION INTELIGENTE ---
+        btnAddLocation.setOnClickListener {
+            if (latitudGuardada != null) {
+                // SI YA HAY UBICACIÓN: Preguntamos si quiere eliminarla
+                AlertDialog.Builder(this)
+                    .setTitle("Ubicación guardada")
+                    .setMessage("¿Deseas eliminar la ubicación actual?")
+                    .setPositiveButton("Eliminar") { _, _ ->
+                        latitudGuardada = null
+                        longitudGuardada = null
+                        direccionGuardada = ""
+
+                        btnAddLocation.text = "Añadir Ubicación"
+                        btnAddLocation.setBackgroundResource(R.drawable.bg_glass_input)
+                        layoutPreviewMapa.visibility = View.GONE // Ocultamos el mapa
+                        Toast.makeText(this, "Ubicación eliminada", Toast.LENGTH_SHORT).show()
+                    }
+                    .setNegativeButton("Mantener", null)
+                    .show()
+            } else {
+                // SI NO HAY UBICACIÓN: Buscamos y mostramos la lista
+                val input = EditText(this)
+                input.hint = "Ej: Mitre 123, Avellaneda"
+                input.setPadding(50, 40, 50, 40)
+
+                AlertDialog.Builder(this)
+                    .setTitle("Buscar Dirección")
+                    .setMessage("Ingresa la calle y ciudad:")
+                    .setView(input)
+                    .setPositiveButton("Buscar") { _, _ ->
+                        val direccionEscrita = input.text.toString()
+
+                        if (direccionEscrita.isNotEmpty()) {
+                            Toast.makeText(this, "Buscando opciones...", Toast.LENGTH_SHORT).show()
+
+                            CoroutineScope(Dispatchers.Main).launch {
+                                // 1. Llamamos a nuestra nueva función
+                                val opciones = NominatimHelper.buscarOpciones(direccionEscrita)
+
+                                if (opciones.isNotEmpty()) {
+                                    // 2. Extraemos solo los nombres para mostrarlos en la lista
+                                    val nombresOpciones = opciones.map { it.nombre }.toTypedArray()
+
+                                    // --- 3. CREAMOS EL ADAPTADOR CON EL DISEÑO PERSONALIZADO ---
+                                    val adaptador = android.widget.ArrayAdapter(
+                                        this@NuevaTarea,
+                                        R.layout.item_ubicacion, // Tu nuevo XML
+                                        android.R.id.text1,      // El ID del texto dentro de ese XML
+                                        nombresOpciones
+                                    )
+
+                                    // 4. Creamos el cuadro de diálogo usando el adaptador
+                                    AlertDialog.Builder(this@NuevaTarea)
+                                        .setTitle("Selecciona la ubicación correcta:")
+                                        .setAdapter(adaptador) { _, indiceSeleccionado -> // <--- Usamos setAdapter
+
+                                            // El usuario eligió una opción
+                                            val lugarElegido = opciones[indiceSeleccionado]
+                                            latitudGuardada = lugarElegido.latitud
+                                            longitudGuardada = lugarElegido.longitud
+                                            direccionGuardada = lugarElegido.nombre
+
+                                            // Actualizamos el botón
+                                            btnAddLocation.text = "📍 Ubicación lista"
+                                            btnAddLocation.setBackgroundResource(R.drawable.bg_option_selected)
+
+                                            // MOSTRAR PREVISUALIZACIÓN DEL MAPA
+                                            layoutPreviewMapa.visibility = View.VISIBLE
+                                            mapViewPreview.setMultiTouchControls(true)
+                                            val mapController = mapViewPreview.controller
+                                            mapController.setZoom(18.0)
+
+                                            val puntoPivote = GeoPoint(latitudGuardada!!, longitudGuardada!!)
+                                            mapController.setCenter(puntoPivote)
+
+                                            // Limpiamos pines anteriores y agregamos el nuevo
+                                            mapViewPreview.overlays.clear()
+                                            val marcador = Marker(mapViewPreview)
+                                            marcador.position = puntoPivote
+                                            marcador.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+                                            marcador.title = direccionGuardada
+
+                                            mapViewPreview.overlays.add(marcador)
+                                            mapViewPreview.invalidate() // Refrescar mapa
+
+                                            Toast.makeText(this@NuevaTarea, "¡Ubicación confirmada!", Toast.LENGTH_SHORT).show()
+                                        }
+                                        .setNegativeButton("Cancelar", null)
+                                        .show()
+                                } else {
+                                    Toast.makeText(this@NuevaTarea, "No se encontraron resultados.", Toast.LENGTH_LONG).show()
+                                }
+                            }
+                        }
+                    }
+                    .setNegativeButton("Cancelar", null)
+                    .show()
+            }
+        }
+
+        //---LOGICA CAMARA---
+        btnTomarFoto.setOnClickListener {
+            if (urlFotoSubida != null) {
+                // SI YA HAY FOTO: Le preguntamos si quiere eliminarla
+                AlertDialog.Builder(this)
+                    .setTitle("Foto ya adjuntada")
+                    .setMessage("¿Deseas eliminar la foto actual de esta tarea?")
+                    .setPositiveButton("Eliminar") { _, _ ->
+                        // Reseteamos la variable
+                        urlFotoSubida = null
+                        uriFotoTemporal = null
+
+                        // Devolvemos el botón a su aspecto original
+                        btnTomarFoto.text = "Añadir foto"
+                        btnTomarFoto.setBackgroundResource(R.drawable.bg_glass_input)
+                        Toast.makeText(this, "Foto eliminada", Toast.LENGTH_SHORT).show()
+                    }
+                    .setNegativeButton("Mantener", null)
+                    .show()
+            } else {
+                // SI NO HAY FOTO: Ejecutamos tu código original de la cámara
+                try {
+                    val archivoTemporal = File.createTempFile(
+                        "JPEG_${System.currentTimeMillis()}_",
+                        ".jpg",
+                        cacheDir
+                    )
+
+                    uriFotoTemporal = FileProvider.getUriForFile(
+                        this,
+                        "com.example.apptareas.fileprovider",
+                        archivoTemporal
+                    )
+
+                    tomarFotoLauncher.launch(uriFotoTemporal!!)
+
+                } catch (e: Exception) {
+                    Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                    e.printStackTrace()
+                }
+            }
+        }
+
         btnCatEstudios.setOnClickListener { seleccionarCategoria(btnCatEstudios, "Estudios") }
         btnCatTrabajo.setOnClickListener { seleccionarCategoria(btnCatTrabajo, "Trabajo") }
         btnCatPersonal.setOnClickListener { seleccionarCategoria(btnCatPersonal, "Personal") }
@@ -166,6 +373,16 @@ class NuevaTarea : AppCompatActivity() {
             if (currentUser != null) {
                 val uid = currentUser.uid
                 val idTarea = UUID.randomUUID().toString()
+                // Objeto ubicacion
+                val objetoUbicacion = if (latitudGuardada != null && longitudGuardada != null) {
+                    mapOf(
+                        "latitud" to latitudGuardada,
+                        "longitud" to longitudGuardada,
+                        "direccion" to direccionGuardada
+                    )
+                } else {
+                    null
+                }
 
                 val tareaData = hashMapOf(
                     "id" to idTarea,
@@ -176,8 +393,8 @@ class NuevaTarea : AppCompatActivity() {
                     "prioridad" to prioridadSeleccionada,
                     "categoria" to categoriaSeleccionada,
                     "estado" to "pendiente",
-                    "ubicacion" to null,
-                    "foto" to null
+                    "ubicacion" to objetoUbicacion,
+                    "foto" to urlFotoSubida
                 )
 
                 db.collection("Usuarios").document(uid)

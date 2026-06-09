@@ -21,7 +21,12 @@ class TaskListActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
-    private lateinit var adapter: TaskAdapter // Guardamos el adaptador a nivel de clase
+    private lateinit var adapter: TaskAdapter
+
+    // --- 1. Variables Globales de las Vistas ---
+    private lateinit var rvTasks: RecyclerView
+    private lateinit var labelPending: TextView
+    private lateinit var emptyState: LinearLayout
 
     // Variables para mantener el estado de la búsqueda
     private var listaOriginal = mutableListOf<Task>()
@@ -32,18 +37,19 @@ class TaskListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.task_list)
 
-        // 1. Inicializar Firebase
+        // Inicializar Firebase
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
-        // 2. Conectar las vistas usando los IDs exactos de tu XML
-        val rvTasks = findViewById<RecyclerView>(R.id.rvTasks)
-        val labelPending = findViewById<TextView>(R.id.labelPending)
-        val emptyState = findViewById<LinearLayout>(R.id.emptyState)
+        // 2. Conectar las vistas a nuestras variables globales
+        rvTasks = findViewById(R.id.rvTasks)
+        labelPending = findViewById(R.id.labelPending)
+        emptyState = findViewById(R.id.emptyState)
+
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
         val fab = findViewById<View>(R.id.fab)
 
-        // --- NUEVO: Conectar Vistas de Búsqueda y Filtros ---
+        // Conectar Vistas de Búsqueda y Filtros
         val etSearch = findViewById<EditText>(R.id.etSearch)
         val filterAll = findViewById<TextView>(R.id.filterAll)
         val chipPending = findViewById<TextView>(R.id.chipPending)
@@ -53,7 +59,7 @@ class TaskListActivity : AppCompatActivity() {
         val chipMedium = findViewById<TextView>(R.id.chipMedium)
         val chipLow = findViewById<TextView>(R.id.chipLow)
 
-        val listaChips = listOf(filterAll, chipPending, chipDone,chipCanceled, chipHigh, chipMedium, chipLow)
+        val listaChips = listOf(filterAll, chipPending, chipDone, chipCanceled, chipHigh, chipMedium, chipLow)
 
         // Funcionalidad al botón + para ir a NuevaTarea
         fab.setOnClickListener {
@@ -61,11 +67,11 @@ class TaskListActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // 3. Configurar la barra de navegación inferior
+        // Configurar la barra de navegación inferior
         bottomNav.selectedItemId = R.id.nav_tasks
         NavigationUtils.configurarNavegacion(this, bottomNav)
 
-        // 4. Configurar la lista y el adaptador (inicia con lista vacía)
+        // Configurar la lista y el adaptador
         rvTasks.layoutManager = LinearLayoutManager(this)
         adapter = TaskAdapter(emptyList()) { idClickeado ->
             val intent = Intent(this@TaskListActivity, DetalleTarea::class.java)
@@ -81,7 +87,7 @@ class TaskListActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {
                 textoBusqueda = s.toString()
-                aplicarFiltros(labelPending, emptyState, rvTasks)
+                aplicarFiltros() // Ya no hace falta pasarle las vistas
             }
         })
 
@@ -100,10 +106,10 @@ class TaskListActivity : AppCompatActivity() {
             chipSeleccionado.setTextColor(Color.WHITE)
 
             // Aplicar los filtros a la lista visual
-            aplicarFiltros(labelPending, emptyState, rvTasks)
+            aplicarFiltros()
         }
 
-        // Asignar clics a los botones
+        // Asignar clics a los botones de filtro
         filterAll.setOnClickListener { seleccionarFiltro(filterAll, "Todas") }
         chipPending.setOnClickListener { seleccionarFiltro(chipPending, "Pendientes") }
         chipDone.setOnClickListener { seleccionarFiltro(chipDone, "Completadas") }
@@ -111,8 +117,17 @@ class TaskListActivity : AppCompatActivity() {
         chipHigh.setOnClickListener { seleccionarFiltro(chipHigh, "Alta") }
         chipMedium.setOnClickListener { seleccionarFiltro(chipMedium, "Media") }
         chipLow.setOnClickListener { seleccionarFiltro(chipLow, "Baja") }
+    }
 
-        // 5. Buscar las tareas en Firestore
+    // ========================================================
+    // 3. LA MAGIA DE LA ACTUALIZACIÓN AUTOMÁTICA
+    // ========================================================
+    override fun onResume() {
+        super.onResume()
+        cargarDatosDeFirebase()
+    }
+
+    private fun cargarDatosDeFirebase() {
         val currentUser = auth.currentUser
         if (currentUser != null) {
             val uid = currentUser.uid
@@ -127,14 +142,13 @@ class TaskListActivity : AppCompatActivity() {
                         val titulo = document.getString("titulo") ?: "Tarea sin título"
                         val fecha = document.getString("fecha") ?: "Sin fecha"
                         val estado = document.getString("estado") ?: "pendiente"
-                        // IMPORTANTE: Recuperamos la prioridad para el Helper
                         val prioridad = document.getString("prioridad") ?: "Baja"
 
                         listaOriginal.add(Task(id, titulo, fecha, estado, prioridad))
                     }
 
-                    // Al terminar de cargar la base de datos, aplicamos tod por primera vez
-                    aplicarFiltros(labelPending, emptyState, rvTasks)
+                    // Al terminar de cargar la base de datos, aplicamos los filtros
+                    aplicarFiltros()
                 }
                 .addOnFailureListener {
                     Toast.makeText(this, "Error al cargar las tareas", Toast.LENGTH_SHORT).show()
@@ -142,16 +156,15 @@ class TaskListActivity : AppCompatActivity() {
         }
     }
 
-    // --- LA FUNCIÓN QUE COORDINA LA MAGIA ---
-    private fun aplicarFiltros(labelPending: TextView, emptyState: LinearLayout, rvTasks: RecyclerView) {
-
+    // --- LA FUNCIÓN QUE COORDINA LA MAGIA  ---
+    private fun aplicarFiltros() {
         // Usamos nuestro archivo 'ayudante' externo
         val listaFiltrada = TaskFilterHelper.filtrarTareas(listaOriginal, textoBusqueda, filtroActual)
 
         // Actualizamos el adaptador
         adapter.actualizarLista(listaFiltrada)
 
-        // Actualizamos los textos de estado
+        // Actualizamos los textos de estado usando las variables globales
         labelPending.text = "RESULTADOS · ${listaFiltrada.size}"
 
         if (listaFiltrada.isEmpty()) {
