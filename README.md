@@ -49,7 +49,19 @@ En la consola de Firebase habilitar:
 - Storage
 
 ### 4. Reglas de Firestore
-
+Para que la aplicación funcione correctamente, debes configurar las reglas de seguridad en la consola de Firebase.
+Copia y pega el siguiente código en la pestaña "Reglas" de tu base de datos Cloud Firestore:
+/*/
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Esta regla controla el documento del usuario y todas sus subcolecciones internas
+    match /Usuarios/{userId}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
+/*/
 
 ### 5. Ejecutar
 Abrir el proyecto en Android Studio y ejecutar en un 
