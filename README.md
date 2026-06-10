@@ -51,7 +51,7 @@ En la consola de Firebase habilitar:
 ### 4. Reglas de Firestore
 Para que la aplicación funcione correctamente, debes configurar las reglas de seguridad en la consola de Firebase.
 Copia y pega el siguiente código en la pestaña "Reglas" de tu base de datos Cloud Firestore:
-/*/
+
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -61,7 +61,6 @@ service cloud.firestore {
     }
   }
 }
-/*/
 
 ### 5. Ejecutar
 Abrir el proyecto en Android Studio y ejecutar en un 
