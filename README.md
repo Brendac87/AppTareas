@@ -55,8 +55,8 @@ Copia y pega el siguiente código en la pestaña "Reglas" de tu base de datos Cl
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Esta regla controla el documento del usuario y todas sus subcolecciones internas
-    match /Usuarios/{userId}/{document=**} {
+      // Esta regla controla el documento del usuario y todas sus subcolecciones internas
+        match /Usuarios/{userId}/{document=**} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
   }
