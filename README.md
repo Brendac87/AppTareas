@@ -22,7 +22,7 @@ ubicacion en el mapa, foto adjunta y recordatorios locales.
 - RF2: Listado de tareas por usuario desde Firestore
 - RF3: Detalle de tarea con foto y ubicacion
 - RF4: Crear y editar tareas con persistencia en Firestore
-- RF5: Mapa con ubicacion de tareas (OSMDroid + Nominatim)
+- RF5: Mapa con ubicacion de la tarea (OSMDroid + Nominatim)
 - RF6: Camara para adjuntar foto a la tarea (Firebase Storage)
 - RF7: Notificaciones locales 30 minutos antes del vencimiento
 
