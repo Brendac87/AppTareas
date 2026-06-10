@@ -62,7 +62,7 @@ service cloud.firestore {
     }
   }
 }
-
+```
 ### 5. Ejecutar
 Abrir el proyecto en Android Studio y ejecutar en un 
 emulador con API 26 o superior, o en un dispositivo fisico.
