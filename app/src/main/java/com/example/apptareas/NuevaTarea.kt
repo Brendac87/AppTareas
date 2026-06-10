@@ -402,6 +402,19 @@ class NuevaTarea : AppCompatActivity() {
                     .set(tareaData)
                     .addOnSuccessListener {
                         Toast.makeText(this, "¡Tarea creada con éxito!", Toast.LENGTH_SHORT).show()
+                        val tiempoAlarmaMilis = NotificationUtil.parseDateToMillis(
+                            fechaSeleccionada,
+                            horaSeleccionada
+                        )
+
+                        if (tiempoAlarmaMilis > System.currentTimeMillis()) {
+                            NotificationUtil.scheduleReminder(
+                                context       = this,
+                                taskId        = idTarea,
+                                taskName      = titulo,
+                                dueTimeMillis = tiempoAlarmaMilis
+                            )
+                        }
                         finish()
                     }
                     .addOnFailureListener { e ->

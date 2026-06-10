@@ -38,7 +38,7 @@ class NotificationActivity : AppCompatActivity() {
             marcarComoLeida(notif.id)
             if (notif.taskId.isNotEmpty()) {
                 val intent = Intent(this, DetalleTarea::class.java)
-                intent.putExtra("TITULO_DE_LA_TAREA", notif.title)
+                intent.putExtra("ID_DE_LA_TAREA", notif.taskId)
                 startActivity(intent)
             }
         }
@@ -73,7 +73,7 @@ class NotificationActivity : AppCompatActivity() {
         for (i in 0 until array.length()) {
             val obj = array.getJSONObject(i)
 
-            //optBoolean devuelve false si no encuentra la clave "leida"
+
             if (!obj.optBoolean("leida", false)) {
                 notifications.add(
                     Notification(
@@ -84,7 +84,6 @@ class NotificationActivity : AppCompatActivity() {
                         subtitle = obj.optString("subtitle", ""),
                         time     = calcularTiempo(obj.optLong("timestamp", System.currentTimeMillis())),
                         isUnread = true,
-                        // Aquí corregimos el taskId usando optString
                         taskId   = obj.optString("taskId", "")
                     )
                 )

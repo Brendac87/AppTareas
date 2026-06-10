@@ -5,7 +5,7 @@ package com.example.apptareas
 data class Notification(
     val id       : String  = "",
     val iconRes  : Int     = R.drawable.ic_alarm,
-    val iconBg   : Int     = 0x1AEC4899.toInt(),
+    val iconBg   : Int     = 0x1AEC4899,
     val title    : String  = "",
     val subtitle : String  = "",
     val time     : String  = "",

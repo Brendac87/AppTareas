@@ -36,24 +36,12 @@ object NotificationUtil {
         taskName:      String,
         dueTimeMillis: Long
     ) {
-        //------------------------------------------
+
         //30 antes
-        //val triggerAt = dueTimeMillis - (30 * 60 * 1000)
+        val triggerAt = dueTimeMillis - (30 * 60 * 1000)
 
         //si ya paso entonces no programar
-        //if (triggerAt < System.currentTimeMillis()) return
-        //------------------------------------------
-
-
-
-        //esta es la notif de prueba esta programa para sonar en 10 seg al comenzar la aplicacion
-        //--------------------prueba----------------------
-        val triggerAt = System.currentTimeMillis() + 10000
-
-        Log.d("NOTIF", "Programando notificación para: $taskName")
-        Log.d("NOTIF", "En 10 segundos: $triggerAt")
-
-        //--------------------fin prueba----------------------
+        if (triggerAt < System.currentTimeMillis()) return
 
         val intent = Intent(context, TaskReceiver::class.java).apply {
             putExtra("task_name", taskName)
@@ -82,7 +70,7 @@ object NotificationUtil {
 
             }
         } else {
-            // Android 11 o menor, siempre puede usar alarma exacta
+            //Android 11 o menor, siempre puede usar alarma exacta
             alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent
             )
@@ -112,6 +100,7 @@ object NotificationUtil {
             )
             format.parse("$date $time")?.time ?: 0L
         } catch (e: Exception) {
+
             0L
         }
     }
