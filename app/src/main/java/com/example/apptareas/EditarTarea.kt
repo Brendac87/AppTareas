@@ -260,7 +260,7 @@ class EditarTarea : AppCompatActivity() {
                                             longitudGuardada = lugarElegido.longitud
                                             direccionGuardada = lugarElegido.nombre
 
-                                            btnAddLocation.text = "📍 Ubicación lista"
+                                            btnAddLocation.text = "📍 Ubicación adjunta"
                                             btnAddLocation.setBackgroundResource(R.drawable.bg_option_selected)
 
                                             layoutPreviewMapa.visibility = View.VISIBLE
@@ -344,7 +344,7 @@ class EditarTarea : AppCompatActivity() {
                             direccionGuardada = ubicacion["direccion"] as? String ?: ""
 
                             if (latitudGuardada != null && longitudGuardada != null) {
-                                btnAddLocation.text = "📍 Ubicación lista"
+                                btnAddLocation.text = "📍 Ubicación adjunta"
                                 btnAddLocation.setBackgroundResource(R.drawable.bg_option_selected)
 
                                 layoutPreviewMapa.visibility = View.VISIBLE

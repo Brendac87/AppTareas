@@ -14,7 +14,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Título de la tarea"
+        android:text="@string/item_title_ejemplo"
         android:textColor="#FFFFFF"
         android:textSize="15sp"
         android:textStyle="bold"
@@ -26,7 +26,7 @@
         android:id="@+id/tvItemDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="14/5/2026"
+        android:text="@string/item_date_ejemplo"
         android:textColor="#80FFFFFF"
         android:textSize="13sp"
         android:layout_marginEnd="16dp"/>
@@ -35,7 +35,7 @@
         android:id="@+id/tvItemStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PENDIENTE"
+        android:text="@string/item_estado_pendiente"
         android:textColor="#FFC107"
         android:textSize="12sp"
         android:textStyle="bold"/>

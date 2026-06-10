@@ -73,7 +73,7 @@ class NuevaTarea : AppCompatActivity() {
 
                     // Cambiamos el texto del botón para que el usuario sepa que funcionó
                     val btnTomarFoto = findViewById<TextView>(R.id.btnTomarFoto)
-                    btnTomarFoto.text = "📸 Foto adjuntada con éxito"
+                    btnTomarFoto.text = "Foto adjuntada"
                     btnTomarFoto.setBackgroundResource(R.drawable.bg_option_selected)
                 }
             }
@@ -267,7 +267,7 @@ class NuevaTarea : AppCompatActivity() {
                                             direccionGuardada = lugarElegido.nombre
 
                                             // Actualizamos el botón
-                                            btnAddLocation.text = "📍 Ubicación lista"
+                                            btnAddLocation.text = "📍 Ubicación adjunta"
                                             btnAddLocation.setBackgroundResource(R.drawable.bg_option_selected)
 
                                             // MOSTRAR PREVISUALIZACIÓN DEL MAPA

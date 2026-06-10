@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,8 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true"
     android:background="@drawable/bg_gradient_login">
-
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,32 +17,26 @@
         android:paddingTop="20dp"
         android:paddingBottom="40dp">
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="4dp"
-            >
+            android:layout_marginBottom="4dp">
+
             <ImageButton
                 android:id="@+id/btnBack"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_alignParentStart="true"
                 android:background="@drawable/bg_glass_input"
                 android:src="@android:drawable/ic_menu_revert"
-                android:contentDescription="Volver"
+                android:contentDescription="@string/cd_volver"
                 android:padding="20dp"/>
-
-
         </LinearLayout>
-
-
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Crear cuenta"
+            android:text="@string/title_crear_cuenta"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -54,7 +45,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Completá tus datos para empezar"
+            android:text="@string/subtitle_crear_cuenta"
             android:textColor="#66FFFFFF"
             android:textSize="14sp"
             android:layout_marginBottom="22dp"/>
@@ -62,13 +53,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="FOTO DE PERFIL"
+            android:text="@string/label_foto_perfil"
             android:textColor="#80FFFFFF"
-            android:textSize="10sp"
+            android:textSize="11sp"
             android:textStyle="bold"
             android:letterSpacing="0.08"
             android:layout_marginBottom="12dp"/>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -88,8 +78,6 @@
                 android:textColor="#FFFFFF"
                 android:textSize="14sp"
                 android:textStyle="bold" />
-
-
         </LinearLayout>
 
         <androidx.cardview.widget.CardView
@@ -105,13 +93,12 @@
                 android:orientation="vertical"
                 android:padding="24dp">
 
-                <!--campo del nombre-->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="NOMBRE"
+                    android:text="@string/label_nombre"
                     android:textColor="#80FFFFFF"
-                    android:textSize="10sp"
+                    android:textSize="11sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.08"
                     android:layout_marginBottom="8dp"/>
@@ -122,6 +109,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:hintEnabled="false"
                     app:boxCornerRadiusTopStart="14dp"
                     app:boxCornerRadiusTopEnd="14dp"
                     app:boxCornerRadiusBottomStart="14dp"
@@ -134,22 +122,20 @@
                         android:id="@+id/etName"
                         android:layout_width="match_parent"
                         android:layout_height="54dp"
-                        android:hint="Tu nombre completo"
+                        android:hint="@string/hint_nombre"
                         android:textColor="#FFFFFF"
                         android:textColorHint="#4DFFFFFF"
                         android:textSize="14sp"
                         android:inputType="textPersonName"
                         android:imeOptions="actionNext"/>
-
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!--campo del correo-->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="EMAIL"
+                    android:text="@string/label_email"
                     android:textColor="#80FFFFFF"
-                    android:textSize="10sp"
+                    android:textSize="11sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.08"
                     android:layout_marginBottom="8dp"/>
@@ -160,6 +146,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:hintEnabled="false"
                     app:boxCornerRadiusTopStart="14dp"
                     app:boxCornerRadiusTopEnd="14dp"
                     app:boxCornerRadiusBottomStart="14dp"
@@ -171,22 +158,20 @@
                         android:id="@+id/etEmail"
                         android:layout_width="match_parent"
                         android:layout_height="54dp"
-                        android:hint="tu@email.com"
+                        android:hint="@string/hint_email"
                         android:textColor="#FFFFFF"
                         android:textColorHint="#4DFFFFFF"
                         android:textSize="14sp"
                         android:inputType="textEmailAddress"
                         android:imeOptions="actionNext"/>
-
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- parte de la contraseña-->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="CONTRASEÑA"
+                    android:text="@string/label_contrasena"
                     android:textColor="#80FFFFFF"
-                    android:textSize="10sp"
+                    android:textSize="11sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.08"
                     android:layout_marginBottom="8dp"/>
@@ -197,6 +182,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:hintEnabled="false"
                     app:boxCornerRadiusTopStart="14dp"
                     app:boxCornerRadiusTopEnd="14dp"
                     app:boxCornerRadiusBottomStart="14dp"
@@ -210,22 +196,20 @@
                         android:id="@+id/etPassword"
                         android:layout_width="match_parent"
                         android:layout_height="54dp"
-                        android:hint="Mínimo 6 caracteres"
+                        android:hint="@string/hint_contrasena"
                         android:textColor="#FFFFFF"
                         android:textColorHint="#4DFFFFFF"
                         android:textSize="14sp"
                         android:inputType="textPassword"
                         android:imeOptions="actionNext"/>
-
                 </com.google.android.material.textfield.TextInputLayout>
-
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="CONFIRMAR CONTRASEÑA"
+                    android:text="@string/label_confirmar_contrasena"
                     android:textColor="#80FFFFFF"
-                    android:textSize="10sp"
+                    android:textSize="11sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.08"
                     android:layout_marginBottom="8dp"/>
@@ -236,6 +220,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    app:hintEnabled="false"
                     app:boxCornerRadiusTopStart="14dp"
                     app:boxCornerRadiusTopEnd="14dp"
                     app:boxCornerRadiusBottomStart="14dp"
@@ -249,50 +234,29 @@
                         android:id="@+id/etConfirmPassword"
                         android:layout_width="match_parent"
                         android:layout_height="54dp"
-                        android:hint="Repetí tu contraseña"
+                        android:hint="@string/hint_confirmar_contrasena"
                         android:textColor="#FFFFFF"
                         android:textColorHint="#4DFFFFFF"
                         android:textSize="14sp"
                         android:inputType="textPassword"
                         android:imeOptions="actionDone"/>
-
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!--boton registrarse para el form -->
                 <Button
                     android:id="@+id/btnRegister"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
                     android:layout_marginTop="20dp"
-                    android:text="Crear cuenta"
+                    android:text="@string/btn_crear_cuenta"
                     android:textColor="#FFFFFF"
                     android:background="@drawable/bg_button_gradient"
                     app:backgroundTint="@null"
                     android:textSize="15sp"
                     android:textStyle="bold"
                     android:stateListAnimator="@null"
-                    android:elevation="0dp">
-
-                </Button>
-
-
+                    android:elevation="0dp" />
 
             </LinearLayout>
-
-
-
         </androidx.cardview.widget.CardView>
-
-
-
-
-
-
-
-
-
     </LinearLayout>
-
-
-
 </ScrollView>

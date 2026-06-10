@@ -1,0 +1,128 @@
+<resources>
+    <string name="app_name">TaskApp</string>
+    //Create Profile
+    <string name="title_crear_cuenta">Create account</string>
+    <string name="subtitle_crear_cuenta">Complete your data to get started</string>
+    <string name="label_foto_perfil">PROFILE PHOTO</string>
+    <string name="label_nombre">NAME</string>
+    <string name="hint_nombre">Your full name</string>
+    <string name="label_email">EMAIL</string>
+    <string name="hint_email">you\@email.com</string>
+    <string name="label_contrasena">PASSWORD</string>
+    <string name="hint_contrasena">Minimum 6 characters</string>
+    <string name="label_confirmar_contrasena">CONFIRM PASSWORD</string>
+    <string name="hint_confirmar_contrasena">Repeat your password</string>
+    <string name="btn_crear_cuenta">Create account</string>
+    <string name="btn_añadir_foto">Add Photo</string>
+    <string name="btn_añadir_ubicacion">Add Location</string>
+    <string name="cd_volver">Go back</string>
+    //Task Detail
+    <string name="desc_boton_volver">Go back</string>
+    <string name="desc_boton_opciones">Task options</string>
+    <string name="prioridad_alta">High</string>
+    <string name="cat_estudios">Studies</string>
+    <string name="estado_pendiente">Pending</string>
+    <string name="titulo_tarea_ejemplo">Submit\nProject</string>
+    <string name="desc_tarea_ejemplo">Present the backend</string>
+    <string name="fecha_ejemplo">June 02, 2026</string>
+    <string name="label_vencimiento">Due date</string>
+    <string name="hora_ejemplo">07:30 PM</string>
+    <string name="label_hora_limite">Deadline</string>
+    <string name="label_recordatorio">Reminder</string>
+    <string name="recordatorio_ejemplo">30 min before</string>
+    <string name="label_foto">Photo</string>
+    <string name="label_ubicacion">Location</string>
+    <string name="btn_cancelar_tarea">Cancel Task</string>
+    <string name="btn_marcar_completada">✓ Mark as completed</string>
+    //Edit Profile
+    <string name="title_editar_perfil">Edit profile</string>
+    <string name="subtitle_editar_perfil">Update your personal information</string>
+    <string name="helper_email_no_modificable">Email cannot be changed</string>
+    <string name="label_nueva_contrasena">NEW PASSWORD</string>
+    <string name="helper_password_no_cambiar">Leave blank to keep current</string>
+    <string name="btn_guardar_cambios">Save changes</string>
+    //Edit Task
+    <string name="title_editar_tarea">Edit Task</string>
+    <string name="hint_seleccionar_fecha">Select date</string>
+    <string name="hint_seleccionar_hora">Select time</string>
+    <string name="label_nombre_tarea">TASK NAME</string>
+    <string name="hint_ejemplo_tarea">E.g: Submit Android assignment</string>
+    <string name="label_descripcion">DESCRIPTION</string>
+    <string name="hint_descripcion">Additional details</string>
+    <string name="label_fecha_hora">DATE AND TIME</string>
+    <string name="label_prioridad">PRIORITY</string>
+    <string name="prioridad_media">Medium</string>
+    <string name="prioridad_baja">Low</string>
+    <string name="label_categoria">CATEGORY</string>
+    <string name="cat_trabajo">Work</string>
+    <string name="cat_personal">Personal</string>
+    <string name="cat_compras">Shopping</string>
+    <string name="cat_hobbies">Hobbies</string>
+    <string name="cat_otros">Other</string>
+    <string name="label_adjuntos">ATTACHMENTS (OPTIONAL)</string>
+    <string name="btn_anadir_foto">Add Photo</string>
+    <string name="btn_anadir_ubicacion">Add Location</string>
+    //Home
+    <string name="greeting_buenos_dias">Good morning</string>
+    <string name="desc_avatar">Avatar</string>
+    <string name="label_progreso_hoy">TODAY\'S PROGRESS</string>
+    <string name="title_tareas_dia">Tasks of the day</string>
+    <string name="title_tareas_hoy">Today\'s tasks</string>
+    <string name="btn_ver_todas">See all</string>
+    <string name="empty_username"> </string>
+    <string name="default_progress">20%</string>
+    <string name="default_completadas">1 completed</string>
+    <string name="default_pendientes">4 pending</string>
+    //Notification Item
+    <string name="desc_icono_alarma">Alarm</string>
+    <string name="notif_title_ejemplo">Task due soon</string>
+    <string name="notif_subtitle_ejemplo">Due in 30 minutes</string>
+    <string name="notif_time_ejemplo">2 min ago</string>
+    //Task Item
+    <string name="item_title_ejemplo">Task title</string>
+    <string name="item_date_ejemplo">5/14/2026</string>
+    <string name="item_estado_pendiente">PENDING</string>
+    //Login
+    <string name="title_taskflow">TaskFlow</string>
+    <string name="subtitle_organiza_dia">Organize your day</string>
+    <string name="hint_password_dots">••••••••</string>
+    <string name="btn_olvidaste_contrasena">Forgot password?</string>
+    <string name="btn_iniciar_sesion">Log in</string>
+    <string name="label_continua_con">Continue with</string>
+    <string name="btn_continuar_google">Continue with Google</string>
+    <string name="label_no_tienes_cuenta">Don\'t have an account? </string>
+    <string name="btn_registrate">Sign up</string>
+    //Notifications
+    <string name="title_notificaciones">Notifications</string>
+    <string name="btn_leer_todo">Read all</string>
+    <string name="title_todo_al_dia">Up to date</string>
+    <string name="desc_no_notificaciones">No pending notifications</string>
+    //New Task
+    <string name="title_editar_tarea_header">Edit Task</string>
+    <string name="title_nueva_tarea">New Task</string>
+    <string name="cd_opciones">More options</string>
+    <string name="btn_crear_tarea">✓ Create task</string>
+    //Profile
+    <string name="title_mi_perfil">My Profile</string>
+    <string name="desc_foto_perfil">Profile photo</string>
+    <string name="btn_editar_perfil">Edit profile</string>
+    <string name="label_completadas">Completed</string>
+    <string name="label_pendientes">Pending</string>
+    <string name="subtitle_configurar_alertas">Configure alerts</string>
+    <string name="title_ayuda">Help</string>
+    <string name="subtitle_centro_soporte">Support center</string>
+    <string name="btn_cerrar_sesion">Log out</string>
+    <string name="title_idioma">Languaje</string>
+    <string name="subtitle_idioma_actual">Español / English</string>
+    <string name="symbol_flecha">›</string>
+    //Task List
+    <string name="title_mis_tareas">My Tasks</string>
+    <string name="hint_buscar_tarea">Search task...</string>
+    <string name="chip_todas">All</string>
+    <string name="chip_pendientes">Pending</string>
+    <string name="chip_completadas">Completed</string>
+    <string name="chip_canceladas">Canceled</string>
+    <string name="label_pendientes_count">PENDING · 4</string>
+    <string name="msg_no_hay_tareas">No tasks here</string>
+    <string name="msg_crear_nueva_tarea">Tap the + to create a new one</string>
+</resources>

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -12,6 +13,9 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firebase.Firebase
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.cardview.widget.CardView
+import androidx.core.os.LocaleListCompat
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -115,6 +119,21 @@ class ProfileActivity : AppCompatActivity() {
                     .setPositiveButton("Cerrar", null)
                     .show()
             }
+        val optLanguage = findViewById<CardView>(R.id.optLanguage) // O usa ViewBinding
+
+        optLanguage.setOnClickListener {
+            // Aquí puedes mostrar un diálogo simple para elegir
+            val languages = arrayOf("Español", "English")
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Seleccionar Idioma")
+            builder.setItems(languages) { _, which ->
+                val localeTag = if (which == 0) "es" else "en"
+                val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(localeTag)
+                // Esto cambia el idioma y recrea la actividad automáticamente
+                AppCompatDelegate.setApplicationLocales(appLocale)
+            }
+            builder.show()
+        }
 
         // cerrar sesion
         findViewById<androidx.cardview.widget.CardView>(R.id.optLogout)

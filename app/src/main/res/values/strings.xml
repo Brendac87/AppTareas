@@ -1,56 +1,129 @@
 <resources>
     <string name="app_name">AppTareas</string>
-
-    <string name="title_nueva_tarea">Nueva Tarea</string>
+    //Crear perfil
+    <string name="title_crear_cuenta">Crear cuenta</string>
+    <string name="subtitle_crear_cuenta">Completá tus datos para empezar</string>
+    <string name="label_foto_perfil">FOTO DE PERFIL</string>
+    <string name="label_nombre">NOMBRE</string>
+    <string name="hint_nombre">Tu nombre completo</string>
+    <string name="label_email">EMAIL</string>
+    <string name="hint_email">tu\@email.com</string>
+    <string name="label_contrasena">CONTRASEÑA</string>
+    <string name="hint_contrasena">Mínimo 6 caracteres</string>
+    <string name="label_confirmar_contrasena">CONFIRMAR CONTRASEÑA</string>
+    <string name="hint_confirmar_contrasena">Repetí tu contraseña</string>
+    <string name="btn_crear_cuenta">Crear cuenta</string>
+    <string name="btn_añadir_foto">Añadir Foto</string>
+    <string name="btn_añadir_ubicacion">Añadir Ubicación</string>
+    <string name="cd_volver">Volver atrás</string>
+    //Detalle tarea
+    <string name="desc_boton_volver">Volver atrás</string>
+    <string name="desc_boton_opciones">Opciones de la tarea</string>
+    <string name="prioridad_alta">Alta</string>
+    <string name="cat_estudios">Estudios</string>
+    <string name="estado_pendiente">Pendiente</string>
+    <string name="titulo_tarea_ejemplo">Entregar\nProyecto</string>
+    <string name="desc_tarea_ejemplo">Presentar el backend</string>
+    <string name="fecha_ejemplo">02 de Junio, 2026</string>
+    <string name="label_vencimiento">Vencimiento</string>
+    <string name="hora_ejemplo">07:30 PM</string>
+    <string name="label_hora_limite">Hora límite</string>
+    <string name="label_recordatorio">Recordatorio</string>
+    <string name="recordatorio_ejemplo">30 min antes</string>
+    <string name="label_foto">Foto</string>
+    <string name="label_ubicacion">Ubicación</string>
+    <string name="btn_cancelar_tarea">Cancelar Tarea</string>
+    <string name="btn_marcar_completada">✓ Marcar completada</string>
+    //Editar perfil
+    <string name="title_editar_perfil">Editar perfil</string>
+    <string name="subtitle_editar_perfil">Actualizá tu información personal</string>
+    <string name="helper_email_no_modificable">El email no se puede modificar</string>
+    <string name="label_nueva_contrasena">NUEVA CONTRASEÑA</string>
+    <string name="helper_password_no_cambiar">Dejar vacio para no cambiarla</string>
+    <string name="btn_guardar_cambios">Guardar cambios</string>
+    //Editar tarea
+    <string name="title_editar_tarea">Editar Tarea</string>
+    <string name="hint_seleccionar_fecha">Seleccionar fecha</string>
+    <string name="hint_seleccionar_hora">Seleccionar hora</string>
     <string name="label_nombre_tarea">NOMBRE DE LA TAREA</string>
     <string name="hint_ejemplo_tarea">Ej: Entregar TP de Android</string>
-
-    <string name="cd_volver">Volver atrás</string>
-    <string name="cd_opciones">Más opciones</string>
-
     <string name="label_descripcion">DESCRIPCIÓN</string>
     <string name="hint_descripcion">Detalles adicionales</string>
-
     <string name="label_fecha_hora">FECHA Y HORA</string>
-    <string name="default_fecha">28 May 2026</string>
-    <string name="default_hora">10:00 AM</string>
-
     <string name="label_prioridad">PRIORIDAD</string>
-    <string name="prioridad_alta">Alta</string>
     <string name="prioridad_media">Media</string>
     <string name="prioridad_baja">Baja</string>
-
     <string name="label_categoria">CATEGORÍA</string>
-    <string name="cat_estudios">Estudios</string>
     <string name="cat_trabajo">Trabajo</string>
     <string name="cat_personal">Personal</string>
     <string name="cat_compras">Compras</string>
     <string name="cat_hobbies">Hobbies</string>
     <string name="cat_otros">Otros</string>
-
     <string name="label_adjuntos">ADJUNTOS (OPCIONAL)</string>
-    <string name="btn_añadir_foto">Añadir Foto</string>
-    <string name="btn_añadir_ubicacion">Añadir Ubicación</string>
-
+    <string name="btn_anadir_foto">Añadir Foto</string>
+    <string name="btn_anadir_ubicacion">Añadir Ubicación</string>
+    //Home
+    <string name="greeting_buenos_dias">Buenos dias</string>
+    <string name="desc_avatar">Avatar</string>
+    <string name="label_progreso_hoy">PROGRESO DE HOY</string>
+    <string name="title_tareas_dia">Tareas del día</string>
+    <string name="title_tareas_hoy">Tareas de hoy</string>
+    <string name="btn_ver_todas">Ver todas</string>
+    <string name="empty_username"> </string>
+    <string name="default_progress">20%</string>
+    <string name="default_completadas">1 completadas</string>
+    <string name="default_pendientes">4 pendientes</string>
+    //item notificacion
+    <string name="desc_icono_alarma">Alarma</string>
+    <string name="notif_title_ejemplo">Tarea por vencer</string>
+    <string name="notif_subtitle_ejemplo">Vence en 30 minutos</string>
+    <string name="notif_time_ejemplo">hace 2 min</string>
+    //item task
+    <string name="item_title_ejemplo">Título de la tarea</string>
+    <string name="item_date_ejemplo">14/5/2026</string>
+    <string name="item_estado_pendiente">PENDIENTE</string>
+    //login
+    <string name="title_taskflow">TaskFlow</string>
+    <string name="subtitle_organiza_dia">Organiza tu dia</string>
+    <string name="hint_password_dots">••••••••</string>
+    <string name="btn_olvidaste_contrasena">¿Olvidaste tu contraseña?</string>
+    <string name="btn_iniciar_sesion">Iniciar sesión</string>
+    <string name="label_continua_con">Continuá con</string>
+    <string name="btn_continuar_google">Continuar con Google</string>
+    <string name="label_no_tienes_cuenta">¿No tenés cuenta? </string>
+    <string name="btn_registrate">Registrate</string>
+    //notificaicon
+    <string name="title_notificaciones">Notificaciones</string>
+    <string name="btn_leer_todo">Leer todo</string>
+    <string name="title_todo_al_dia">Todo al día</string>
+    <string name="desc_no_notificaciones">No tenés notificaciones pendientes</string>
+    //nueva tarea
+    <string name="title_editar_tarea_header">Editar Tarea</string>
+    <string name="title_nueva_tarea">Nueva Tarea</string>
+    <string name="cd_opciones">Más opciones</string>
     <string name="btn_crear_tarea">✓ Crear tarea</string>
-
-    <string name="estado_pendiente">Pendiente</string>
-    <string name="titulo_tarea_ejemplo">Entregar\nProyecto</string>
-    <string name="desc_tarea_ejemplo">Presentar el backend</string>
-    <string name="fecha_ejemplo">28 May 2026</string>
-    <string name="label_vencimiento">Vencimiento</string>
-    <string name="hora_ejemplo">12:00 PM</string>
-    <string name="label_hora_limite">Hora límite</string>
-    <string name="subtareas_ejemplo">2 / 4</string>
-    <string name="label_subtareas">Subtareas</string>
-    <string name="recordatorio_ejemplo">30 min antes</string>
-    <string name="label_recordatorio">Recordatorio</string>
-    <string name="label_foto_adjunta">FOTO ADJUNTA</string>
-    <string name="foto_ejemplo">foto.jpg</string>
-    <string name="label_ubicacion">UBICACIÓN</string>
-    <string name="btn_marcar_completada">✓ Marcar completada</string>
-
-    <string name="desc_boton_volver">Volver atrás</string>
-    <string name="desc_boton_opciones">Opciones de la tarea</string>
+    //perfil
+    <string name="title_mi_perfil">Mi Perfil</string>
+    <string name="desc_foto_perfil">Foto de perfil</string>
+    <string name="btn_editar_perfil">Editar perfil</string>
+    <string name="label_completadas">Completadas</string>
+    <string name="label_pendientes">Pendientes</string>
+    <string name="subtitle_configurar_alertas">Configurar alertas</string>
+    <string name="title_ayuda">Ayuda</string>
+    <string name="subtitle_centro_soporte">Centro de soporte</string>
+    <string name="btn_cerrar_sesion">Cerrar sesión</string>
+    <string name="title_idioma">Idioma</string>
+    <string name="subtitle_idioma_actual">Español / English</string>
+    <string name="symbol_flecha">›</string>
+    //lista tareas
+    <string name="title_mis_tareas">Mis Tareas</string>
+    <string name="hint_buscar_tarea">Buscar tarea...</string>
+    <string name="chip_todas">Todas</string>
+    <string name="chip_pendientes">Pendientes</string>
+    <string name="chip_completadas">Completadas</string>
+    <string name="chip_canceladas">Canceladas</string>
+    <string name="label_pendientes_count">PENDIENTES · 4</string>
+    <string name="msg_no_hay_tareas">No hay tareas acá</string>
+    <string name="msg_crear_nueva_tarea">Tocá el + para crear una nueva</string>
 
 </resources>
